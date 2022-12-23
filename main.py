@@ -1,5 +1,10 @@
 from tkinter import *
 from datetime import date
+import globales
+import configFunction
+
+# initialise les var globales
+globales.initialize() 
 
 # declare the window
 window = Tk()
@@ -45,6 +50,8 @@ def next():
     global createAccountTwoFrame
     global userName
     global title
+    global currency
+    availableCurrency = ['EUR', 'USD', 'CHF']
 
     if backYet == 1:
         createAccountOneFrame.pack_forget()
@@ -57,16 +64,29 @@ def next():
         for widget in middleCreateAccountOneFrame.winfo_children():
             if isinstance(widget, Entry):
                 r += 1
+                #récup title account
                 if (not widget.get() or len(widget.get()) > 50 ) and r == 0:
                     c = 1
                     Label(middleCreateAccountOneFrame, text='Please specify a title (max. 50 characters)').grid(row=r, column=3, sticky='nw')
                 elif widget.get() and len(widget.get()) < 50 and r == 0:
                     title = widget.get()
+                    globales.accountList = [title]
+                #récup username
                 if (not widget.get() or len(widget.get()) > 12 ) and r == 1:
                     c = 1
                     Label(middleCreateAccountOneFrame, text='Specify your name (max. 12 characters)').grid(row=r, column=3, sticky='nw')
                 elif widget.get() and len(widget.get()) < 12 and r == 1:
                     userName = widget.get()
+                    globales.username = userName
+                #récup currency account
+                if (not widget.get() or widget.get() in availableCurrency ) and r == 2:
+                    c = 1
+                    Label(middleCreateAccountOneFrame, text='Please use available currency (EUR, USD, CHF)').grid(row=r, column=3, sticky='nw')
+                elif widget.get() and widget.get() in availableCurrency and r == 2:
+                    currency = widget.get()
+                    print(widget.get())
+                    print('test')
+                    globales.currencyList = [currency]
 
         if c == 0:
             createAccountOneFrame.pack_forget()
@@ -74,7 +94,7 @@ def next():
             createAccountTwoFrame.pack()
 
 def upDate():
-    global UserName
+    global UserName # c'est pas en trop ça ?
 
     partcipantFrame = Frame(middleCreateAccountTwoFrame)
     Label(partcipantFrame, text=userName).grid(row=0, column=0, sticky='nw')
@@ -184,6 +204,8 @@ def finish():
     createAccountTwoFrame.pack_forget()
     mainFrame.pack()
     displayExpensesFrame()
+
+    configFunction.createConfig()
 
 Button(footerCreateAccountTwoFrame, text='Back', command=lambda:back()).grid(row=0, column=0, sticky='nw')
 Button(footerCreateAccountTwoFrame, text='Finish', command=lambda:finish()).grid(row=0, column=1, sticky='ne')
