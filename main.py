@@ -1,6 +1,16 @@
 from tkinter import *
 from datetime import date
 
+#colors
+color0 = '#323232' #background (grey)
+color1 = '#FFA500' #font title (orange)
+color2 = 'white' #font text (white)
+color3 = '#FF4C4C' #font warning message (red)
+
+#fonts
+font0 = 'DIN Condensed' #title
+font1 = 'Futura' #test
+
 # declare the window
 window = Tk()
 # set window title
@@ -8,35 +18,39 @@ window.title("Tricount Clone")
 # set window width and height
 window.geometry('800x400')
 # set window background color
-window.configure(bg='white')
+window.configure(bg=color0)
 
 createAccountOneFrame = Frame(window)
 
 headCreateAccountOneFrame = Frame(createAccountOneFrame)
 
-Label(headCreateAccountOneFrame, text='Create an account 1/2').grid(row=0, column=0, sticky='nw')
-Label(headCreateAccountOneFrame, text='Choose an explicit title and give more information in the description').grid(row=1, column=0, sticky='nw')
+Label(headCreateAccountOneFrame, text='Create an account 1/2', font=(font0, 50), fg=color1).grid(row=0, column=0, sticky='nw')
+Label(headCreateAccountOneFrame, text='Choose an explicit title and give more information in the description', font=(font0, 30), fg=color2).grid(row=1, column=0, sticky='nw')
 
-headCreateAccountOneFrame.pack(side=TOP, expand=True, fill=X)
+headCreateAccountOneFrame.pack(side=TOP, expand=True, fill=BOTH)
 
 middleCreateAccountOneFrame = Frame(createAccountOneFrame)
 
 title = 'none'
-Label(middleCreateAccountOneFrame, text='Title :').grid(row=0, column=0, sticky='nw')
-Entry(middleCreateAccountOneFrame).grid(row=0, column=1)
+Label(middleCreateAccountOneFrame, text='Title :', font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='nw')
+Entry(middleCreateAccountOneFrame, width=50).grid(row=0, column=1)
+Label(middleCreateAccountOneFrame, text='Please specify a title (max. 50 characters)', font=(font1, 10), fg=color0).grid(row=0, column=3, sticky='nw')
 
 userName = 'none'
-Label(middleCreateAccountOneFrame, text='Your name :').grid(row=1, column=0, sticky='nw')
-Entry(middleCreateAccountOneFrame).grid(row=1, column=1)
+Label(middleCreateAccountOneFrame, text='Your name :', font=(font1, 15), fg=color2).grid(row=1, column=0, sticky='nw')
+Entry(middleCreateAccountOneFrame, width=50).grid(row=1, column=1)
+Label(middleCreateAccountOneFrame, text='Specify your name (max. 12 characters)', font=(font1, 10), fg=color0).grid(row=1, column=3, sticky='nw')
 
-Label(middleCreateAccountOneFrame, text='Currency  :').grid(row=2, column=0, sticky='nw')
-Entry(middleCreateAccountOneFrame).grid(row=2, column=1)
-Label(middleCreateAccountOneFrame, text='(EUR, USD, CHF, ...)').grid(row=2, column=3, sticky='nw')
+Label(middleCreateAccountOneFrame, text='Currency  :', font=(font1, 15), fg=color2).grid(row=2, column=0, sticky='nw')
+cu = Entry(middleCreateAccountOneFrame, width=50)
+cu.insert(0, "EUR")
+cu.grid(row=2, column=1)
+Label(middleCreateAccountOneFrame, text='(EUR, USD, CHF, ...)', font=(font1, 10), fg=color2).grid(row=2, column=3, sticky='nw')
 
-Label(middleCreateAccountOneFrame, text='Description  :').grid(row=3, column=0, sticky='nw')
-Entry(middleCreateAccountOneFrame).grid(row=3, column=1)
+Label(middleCreateAccountOneFrame, text='Description  :', font=(font1, 15), fg=color2).grid(row=3, column=0, sticky='nw')
+Entry(middleCreateAccountOneFrame, width=50).grid(row=3, column=1)
 
-middleCreateAccountOneFrame.pack(side=TOP, expand=True, fill=X)
+middleCreateAccountOneFrame.pack(side=TOP, expand=True, fill=BOTH)
 
 footerCreateAccountOneFrame = Frame(createAccountOneFrame)
 
@@ -59,12 +73,12 @@ def next():
                 r += 1
                 if (not widget.get() or len(widget.get()) > 50 ) and r == 0:
                     c = 1
-                    Label(middleCreateAccountOneFrame, text='Please specify a title (max. 50 characters)').grid(row=r, column=3, sticky='nw')
+                    Label(middleCreateAccountOneFrame, text='Please specify a title (max. 50 characters)', font=(font1, 10), fg=color3).grid(row=r, column=3, sticky='nw')
                 elif widget.get() and len(widget.get()) < 50 and r == 0:
                     title = widget.get()
                 if (not widget.get() or len(widget.get()) > 12 ) and r == 1:
                     c = 1
-                    Label(middleCreateAccountOneFrame, text='Specify your name (max. 12 characters)').grid(row=r, column=3, sticky='nw')
+                    Label(middleCreateAccountOneFrame, text='Specify your name (max. 12 characters)', font=(font1, 10), fg=color3).grid(row=r, column=3, sticky='nw')
                 elif widget.get() and len(widget.get()) < 12 and r == 1:
                     userName = widget.get()
 
@@ -77,13 +91,13 @@ def upDate():
     global UserName
 
     partcipantFrame = Frame(middleCreateAccountTwoFrame)
-    Label(partcipantFrame, text=userName).grid(row=0, column=0, sticky='nw')
-    Label(partcipantFrame, text=' (this is your name)').grid(row=0, column=1, sticky='nw')
+    Label(partcipantFrame, text=userName, font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='w')
+    Label(partcipantFrame, text=' (this is your name)', font=(font1, 10), fg=color2).grid(row=0, column=1, sticky='w')
     partcipantFrame.grid(row=0, column=0, sticky='nw')
 
 Button(createAccountOneFrame, text='Continue', command=lambda:next()).pack()
 
-footerCreateAccountOneFrame.pack(side=BOTTOM, expand=True, fill=X)
+footerCreateAccountOneFrame.pack(side=BOTTOM, expand=True, fill=BOTH)
 
 createAccountOneFrame.pack()
 
@@ -91,8 +105,8 @@ createAccountTwoFrame = Frame(window)
 
 headCreateAccountTwoFrame = Frame(createAccountTwoFrame)
 
-Label(headCreateAccountTwoFrame, text='Create an account 2/2').grid(row=0, column=0, sticky='nw')
-Label(headCreateAccountTwoFrame, text='List the people involved in the accounts').grid(row=1, column=0, sticky='nw')
+Label(headCreateAccountTwoFrame, text='Create an account 2/2', font=(font0, 50), fg=color1).grid(row=0, column=0, sticky='nw')
+Label(headCreateAccountTwoFrame, text='List the people involved in the accounts', font=(font0, 30), fg=color2).grid(row=1, column=0, sticky='nw')
 
 headCreateAccountTwoFrame.pack(side=TOP, expand=True, fill=X)
 
@@ -106,13 +120,13 @@ def addParticipant():
 
     headTop = Frame(top)
 
-    Label(headTop, text='Add participant').pack()
+    Label(headTop, text='Add participant', font=(font0, 30), fg=color2).pack()
 
     headTop.pack(side=TOP, expand=True, fill=X)
 
     middleTop = Frame(top)
 
-    Label(middleTop, text='His name').grid(row=0, column=0, sticky='nw')
+    Label(middleTop, text='His name', font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='nw')
     Entry(middleTop).grid(row=0, column=1, sticky='nw')
 
     middleTop.pack(side=TOP, expand=True, fill=X)
@@ -130,7 +144,7 @@ def addParticipant():
                 r += 1
 
             participantFrame  = Frame(middleCreateAccountTwoFrame)
-            Label(participantFrame, text=newParticipantName).grid(row=r, column=0, sticky='nw')
+            Label(participantFrame, text=newParticipantName, font=(font1, 15), fg=color2).grid(row=r, column=0, sticky='nw')
             Button(participantFrame, text='Delete', command=lambda:participantFrame.destroy()).grid(row=r, column=1, sticky='ne')
             participantFrame.grid(row=r, column=0, sticky='nw')
 
@@ -198,31 +212,33 @@ def upDateHead():
     for widget in headMainFrame.winfo_children():
         widget.pack_forget()
 
-    Label(headMainFrame, text="Comptes '"+str(title)+"'").grid(row=0, column=0, sticky='nw')
-    Label(headMainFrame, text='Created by '+str(userName)+', on '+str(date.today())).grid(row=1, column=0, sticky='nw')
+    titleFrame = Frame(headMainFrame, width=800)
+    Label(titleFrame, text="Comptes '"+str(title)+"'", font=(font0, 50), fg=color1).grid(row=0, column=0, sticky='nw')
+    titleFrame.pack(side=TOP, expand=True, fill=X)
+    Label(headMainFrame, text='Created by '+str(userName)+', on '+str(date.today()), font=(font0, 30), fg=color2).pack(side=LEFT, expand=True, fill=X)
 
     buttonHeadMainFrame = Frame(headMainFrame)
 
-    Button(buttonHeadMainFrame, text='Print').grid(row=0, column=0, sticky='nw')
-    Button(buttonHeadMainFrame, text='Creat account').grid(row=0, column=1, sticky='nw')
-    Button(buttonHeadMainFrame, text='Exit').grid(row=0, column=2, sticky='nw')
+    Button(buttonHeadMainFrame, text='Print', width=10).pack(side=LEFT, expand=True, fill=X)
+    Button(buttonHeadMainFrame, text='Creat account', width=10).pack(side=LEFT, expand=True, fill=X)
+    Button(buttonHeadMainFrame, text='Exit', command=lambda:window.destroy(), width=10).pack(side=RIGHT, expand=True, fill=X)
 
-    buttonHeadMainFrame.grid(row=1, column=1, sticky='ne')
+    buttonHeadMainFrame.pack(side=RIGHT, expand=True, fill=X)
 
-headMainFrame = Frame(mainFrame)
+headMainFrame = Frame(mainFrame, width=800)
 
-headMainFrame.pack(side=TOP)
+headMainFrame.pack(side=TOP, expand=True, fill=X)
 
-middleMainFrame = Frame(mainFrame)
+middleMainFrame = Frame(mainFrame, width=800)
 
-headMiddleMainFrame = Frame(middleMainFrame)
+headMiddleMainFrame = Frame(middleMainFrame, width=800)
 
-Button(headMiddleMainFrame, text='Expenses', command=lambda:displayExpensesFrame()).grid(row=0, column=0, sticky='nw')
-Button(headMiddleMainFrame, text='Balance', command=lambda:displayBalanceFrame()).grid(row=0, column=1, sticky='nw')
-Button(headMiddleMainFrame, text='Share', command=lambda:displayShareFrame()).grid(row=0, column=2, sticky='nw')
-Button(headMiddleMainFrame, text='Settings', command=lambda:displaySettingFrame()).grid(row=0, column=3, sticky='nw')
+Button(headMiddleMainFrame, text='Expenses', command=lambda:displayExpensesFrame(), bg=color1).pack(side=LEFT, expand=True, fill=X)
+Button(headMiddleMainFrame, text='Balance', command=lambda:displayBalanceFrame()).pack(side=LEFT, expand=True, fill=X)
+Button(headMiddleMainFrame, text='Share', command=lambda:displayShareFrame()).pack(side=LEFT, expand=True, fill=X)
+Button(headMiddleMainFrame, text='Settings', command=lambda:displaySettingFrame()).pack(side=RIGHT, expand=True, fill=X)
 
-headMiddleMainFrame.pack(side=TOP)
+headMiddleMainFrame.pack(side=TOP, fill=X)
 
 def clearFrame(inputFrame):
     for widget in inputFrame.winfo_children():
@@ -236,39 +252,39 @@ def displayExpensesFrame():
 
     if expensesFrame :
         expensesFrame.pack_forget()
-        expensesFrame = Frame(contentMiddleMainFrame)
+        expensesFrame = Frame(contentMiddleMainFrame, width=800)
 
     def upDateHeadExpeses():
         global headExpensesFrame
 
-        Label(headExpensesFrame, text='List of expenses').grid(row=0, column=0, sticky='nw')
-        Label(headExpensesFrame, text='You are identified as '+str(userName)).grid(row=0, column=1, sticky='nw')
+        Label(headExpensesFrame, text='List of expenses', font=(font1, 15), fg=color2).pack(side=LEFT)
+        Label(headExpensesFrame, text='You are identified as '+str(userName), font=(font1, 15), fg=color2).pack(side=RIGHT)
 
-        headExpensesFrame.pack(side=TOP)
+        headExpensesFrame.pack(side=TOP, expand=True, fill=X)
 
     global headExpensesFrame
-    headExpensesFrame = Frame(expensesFrame)
+    headExpensesFrame = Frame(expensesFrame, width=800)
     #Content set in upDateHeadExpeses()
-    headExpensesFrame.pack(side=TOP)
+    headExpensesFrame.pack(side=TOP, expand=True, fill=X)
 
     upDateHeadExpeses()
 
-    middleExepensesFrame = Frame(expensesFrame)
+    middleExepensesFrame = Frame(expensesFrame, width=800)
 
-    Label(middleExepensesFrame, text='Who paid, how much and why ?').grid(row=0, column=0, sticky='nw')
-    Label(middleExepensesFrame, text='When ?').grid(row=0, column=1, sticky='nw')
-    Label(middleExepensesFrame, text='Who does it concern ?').grid(row=0, column=2, sticky='nw')
-    Label(middleExepensesFrame, text='For you ?').grid(row=0, column=3, sticky='nw')
+    Label(middleExepensesFrame, text='Who paid, how much and why ?', font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='nw')
+    Label(middleExepensesFrame, text='When ?', font=(font1, 15), fg=color2).grid(row=0, column=1, sticky='nw')
+    Label(middleExepensesFrame, text='Who does it concern ?', font=(font1, 15), fg=color2).grid(row=0, column=2, sticky='nw')
+    Label(middleExepensesFrame, text='For you ?', font=(font1, 15), fg=color2).grid(row=0, column=3, sticky='nw')
 
-    middleExepensesFrame.pack(side=TOP)
+    middleExepensesFrame.pack(side=TOP, expand=True, fill=X)
 
-    footerExpensesFrame = Frame(expensesFrame)
+    footerExpensesFrame = Frame(expensesFrame, width=800)
 
     Button(footerExpensesFrame, text='Add expense').grid(row=0, column=0, sticky='nw')
 
-    footerExpensesFrame.pack(side=BOTTOM)
+    footerExpensesFrame.pack(side=BOTTOM, expand=True, fill=X)
 
-    expensesFrame.pack()
+    expensesFrame.pack(expand=True, fill=X)
 
 def displayBalanceFrame():
     global balanceFrame
@@ -278,41 +294,41 @@ def displayBalanceFrame():
 
     if balanceFrame:
         balanceFrame.pack_forget()
-        balanceFrame = Frame(contentMiddleMainFrame)
+        balanceFrame = Frame(contentMiddleMainFrame, width=800)
 
     def upDateHeadBalance():
         global headBalanceFrame
 
-        Label(headBalanceFrame, text='The reds owe the greens').grid(row=0, column=0, sticky='nw')
-        Label(headBalanceFrame, text='You are identified as '+str(userName)).grid(row=0, column=1, sticky='nw')
+        Label(headBalanceFrame, text='The reds owe the greens', font=(font1, 15), fg=color2).pack(side=LEFT)
+        Label(headBalanceFrame, text='You are identified as '+str(userName), font=(font1, 15), fg=color2).pack(side=RIGHT)
 
-        headBalanceFrame.pack(side=TOP)
+        headBalanceFrame.pack(side=TOP, expand=True, fill=X)
 
     global headBalanceFrame
-    headBalanceFrame = Frame(balanceFrame)
+    headBalanceFrame = Frame(balanceFrame, width=800)
     #Content set in upDateHeadBalance()
     headBalanceFrame.pack(side=TOP)
 
     upDateHeadBalance()
 
-    rightMiddleBalanceFrame = Frame(balanceFrame)
+    rightMiddleBalanceFrame = Frame(balanceFrame, width=800)
 
     #a faire en fonction du compte
-    Label(rightMiddleBalanceFrame, text='How to balance? ').grid(row=0, column=0, sticky='nw')
-    Label(rightMiddleBalanceFrame, text='No payment is required to balance the books !').grid(row=1, column=0, sticky='nw')
+    Label(rightMiddleBalanceFrame, text='How to balance? ', font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='nw')
+    Label(rightMiddleBalanceFrame, text='No payment is required to balance the books !', font=(font1, 15), fg=color2).grid(row=1, column=0, sticky='nw')
 
-    rightMiddleBalanceFrame.pack(side=RIGHT)
+    rightMiddleBalanceFrame.pack(side=RIGHT, expand=True, fill=X)
 
-    leftMiddleBalanceFrame = Frame(balanceFrame)
+    leftMiddleBalanceFrame = Frame(balanceFrame, width=800)
 
     #a faire en fonction du compte
-    Label(leftMiddleBalanceFrame, text='user').grid(row=0, column=0, sticky='nw')
-    Label(leftMiddleBalanceFrame, text='user').grid(row=0, column=1, sticky='nw')
-    Label(leftMiddleBalanceFrame, text='user').grid(row=0, column=2, sticky='nw')
+    Label(leftMiddleBalanceFrame, text='user', font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='nw')
+    Label(leftMiddleBalanceFrame, text='user', font=(font1, 15), fg=color2).grid(row=0, column=1, sticky='nw')
+    Label(leftMiddleBalanceFrame, text='user', font=(font1, 15), fg=color2).grid(row=0, column=2, sticky='nw')
 
-    leftMiddleBalanceFrame.pack(side=LEFT)
+    leftMiddleBalanceFrame.pack(side=LEFT, expand=True, fill=X)
 
-    balanceFrame.pack(side=TOP)
+    balanceFrame.pack(side=TOP, expand=True, fill=X)
 
 def displayShareFrame():
     global shareFrame
@@ -322,39 +338,39 @@ def displayShareFrame():
 
     if shareFrame :
         shareFrame.pack_forget()
-        shareFrame = Frame(contentMiddleMainFrame)
+        shareFrame = Frame(contentMiddleMainFrame, width=800)
 
     def upDateHeadShare():
         global headShareFrame
 
-        Label(headShareFrame, text='Invite friends to participate in the accounts').grid(row=0, column=0, sticky='nw')
-        Label(headShareFrame, text='You are identified as '+str(userName)).grid(row=0, column=1, sticky='nw')
+        Label(headShareFrame, text='Invite friends to participate in the accounts', font=(font1, 15), fg=color2).pack(side=LEFT)
+        Label(headShareFrame, text='You are identified as '+str(userName), font=(font1, 15), fg=color2).pack(side=RIGHT)
 
-        headShareFrame.pack(side=TOP)
+        headShareFrame.pack(side=TOP, expand=True, fill=X)
 
     global headShareFrame
-    headShareFrame = Frame(shareFrame)
+    headShareFrame = Frame(shareFrame, width=800)
     #Content set in upDateHeadExpeses()
-    headShareFrame.pack(side=TOP)
+    headShareFrame.pack(side=TOP, expand=True, fill=X)
 
     upDateHeadShare()
 
-    middleShareFrame = Frame(shareFrame)
-
-    Label(middleShareFrame, text='Copy the text below into an email and send it to the group :').pack(side=TOP)
+    middleShareFrame = Frame(shareFrame, width=800)
     
-    contentMiddleShareFrame = Frame(middleShareFrame)
+    contentMiddleShareFrame = Frame(middleShareFrame, width=800)
 
-    Label(contentMiddleShareFrame, text='The '+str(title)+' accounts are accessible on Tricount :').grid(row=0, column=0, sticky='nw')
-    Label(contentMiddleShareFrame, text='To access :').grid(row=1, column=0, sticky='nw')
-    Label(contentMiddleShareFrame, text='• From your mobile device, download the Tricount app (for iPhone, Android and Windows) and then follow the link :').grid(row=2, column=0, sticky='nw')
-    Label(contentMiddleShareFrame, text='• From a computer, simply click on the link ').grid(row=1, column=0, sticky='nw')
+    Label(contentMiddleShareFrame, text='Copy the text below into an email and send it to the group :', font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='nw')
+    Label(contentMiddleShareFrame, text='The '+str(title)+' accounts are accessible on Tricount :', font=(font1, 15), fg=color2).grid(row=1, column=0, sticky='nw')
+    Label(contentMiddleShareFrame, text='To access :', font=(font1, 15), fg=color2).grid(row=2, column=0, sticky='nw')
+    Label(contentMiddleShareFrame, text='• From your mobile device, download the Tricount app', font=(font1, 15), fg=color2).grid(row=3, column=0, sticky='nw')
+    Label(contentMiddleShareFrame, text=' (for iPhone, Android and Windows) and then follow the link :', font=(font1, 15), fg=color2).grid(row=4, column=0, sticky='nw')
+    Label(contentMiddleShareFrame, text='• From a computer, simply click on the link ', font=(font1, 15), fg=color2).grid(row=5, column=0, sticky='nw')
 
-    contentMiddleShareFrame.pack(side=TOP)
+    contentMiddleShareFrame.pack(side=TOP, expand=True, fill=X)
 
-    middleShareFrame.pack(side=TOP)
+    middleShareFrame.pack(side=TOP, expand=True, fill=X)
 
-    shareFrame.pack()
+    shareFrame.pack(expand=True, fill=X)
 
 def displaySettingFrame():
     global settingFrame
@@ -364,40 +380,52 @@ def displaySettingFrame():
 
     if settingFrame :
         settingFrame.pack_forget()
-        settingFrame = Frame(contentMiddleMainFrame)
+        settingFrame = Frame(contentMiddleMainFrame, width=800)
 
     def upDateHeadSetting():
         global headSettingFrame
 
-        Label(headSettingFrame, text='General information').grid(row=0, column=0, sticky='nw')
-        Label(headSettingFrame, text='You are identified as '+str(userName)).grid(row=0, column=1, sticky='nw')
+        Label(headSettingFrame, text='General information', font=(font1, 15), fg=color2).pack(side=LEFT)
+        Label(headSettingFrame, text='You are identified as '+str(userName), font=(font1, 15), fg=color2).pack(side=RIGHT)
 
-        headSettingFrame.pack(side=TOP)
+        headSettingFrame.pack(side=TOP, expand=True, fill=X)
 
     global headSettingFrame
-    headSettingFrame = Frame(shareFrame)
+    headSettingFrame = Frame(shareFrame, width=800)
     #Content set in upDateHeadExpeses()
-    headSettingFrame.pack(side=TOP)
+    headSettingFrame.pack(side=TOP, expand=True, fill=X)
 
     upDateHeadSetting()
 
-    middleSettingFrame = Frame(settingFrame)
+    middleSettingFrame = Frame(settingFrame, width=800)
 
-    Label(middleSettingFrame, text='A faire depuis un fichier').grid(row=0, column=0, sticky='nw')
+    Label(middleSettingFrame, text='Title :', font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='nw')
+    ti = Entry(middleSettingFrame, width=50)
+    ti.insert(0, title)
+    ti.grid(row=0, column=1, sticky='nw')
 
-    middleSettingFrame.pack(side=TOP)
+    Label(middleSettingFrame, text='Currency :', font=(font1, 15), fg=color2).grid(row=1, column=0, sticky='nw')
+    Label(middleSettingFrame, text='Euro ').grid(row=1, column=1, sticky='nw')
 
-    settingFrame.pack()
+    Label(middleSettingFrame, text='Description :', font=(font1, 15), fg=color2).grid(row=2, column=0, sticky='nw')
+    Entry(middleSettingFrame, width=50).grid(row=2, column=1, sticky='nw')
 
-contentMiddleMainFrame = Frame(middleMainFrame)
+    Label(middleSettingFrame, text='Groupe', font=(font1, 15), fg=color2).grid(row=3, column=0, sticky='nw')
+    Button(middleSettingFrame, text='Add participant').grid(row=3, column=1, sticky='nw')
 
-expensesFrame = Frame(middleMainFrame)
-balanceFrame = Frame(middleMainFrame)
-shareFrame = Frame(middleMainFrame)
-settingFrame = Frame(middleMainFrame)
+    middleSettingFrame.pack(side=TOP, expand=True, fill=X)
 
-contentMiddleMainFrame.pack(side=TOP)
+    settingFrame.pack(expand=True, fill=X)
 
-middleMainFrame.pack(side=TOP)
+contentMiddleMainFrame = Frame(middleMainFrame, width=800)
+
+expensesFrame = Frame(middleMainFrame, width=800)
+balanceFrame = Frame(middleMainFrame, width=800)
+shareFrame = Frame(middleMainFrame, width=800)
+settingFrame = Frame(middleMainFrame, width=800)
+
+contentMiddleMainFrame.pack(side=TOP, expand=True, fill=X)
+
+middleMainFrame.pack(side=TOP, expand=True, fill=X)
 
 window.mainloop()
