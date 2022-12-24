@@ -85,7 +85,7 @@ def next():
                 elif widget.get() and widget.get() in availableCurrency and r == 2:
                     currency = widget.get()
                     print(widget.get())
-                    print('test')
+                    print('test') # marche pas 
                     globales.currencyList = [currency]
 
         if c == 0:
