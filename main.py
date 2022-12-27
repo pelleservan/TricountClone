@@ -6,6 +6,8 @@ import configFunction
 # initialise les var globales
 globales.initialize() 
 
+isConfigCreated = configFunction.isConfigCreated()
+
 # declare the window
 window = Tk()
 # set window title

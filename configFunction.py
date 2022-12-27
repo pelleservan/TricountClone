@@ -16,3 +16,11 @@ def createConfig():
 
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
+
+def isConfigCreated():
+    result = False
+
+    config = configparser.ConfigParser()
+    result = bool(config.read('config.ini'))
+    print(result)
+    return result
