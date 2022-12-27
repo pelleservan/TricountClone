@@ -10,8 +10,8 @@ def createConfig():
         i = 0
         config['Account/' + account] = {}
         accountConfig = config['Account/' + account]
-        #accountConfig['Currency'] = globales.currencyList[i]
-        accountConfig['fichier'] = './' + account + '.csv'
+        accountConfig['Currency'] = globales.currencyList[i]
+        accountConfig['fichier'] = './' + account.replace(" ", "_") + '.csv'
         i+=1
 
     with open('config.ini', 'w') as configfile:

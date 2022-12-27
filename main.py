@@ -79,13 +79,11 @@ def next():
                     userName = widget.get()
                     globales.username = userName
                 #récup currency account
-                if (not widget.get() or widget.get() in availableCurrency ) and r == 2:
+                if (not widget.get() or not (widget.get().upper() in availableCurrency) ) and r == 2:
                     c = 1
                     Label(middleCreateAccountOneFrame, text='Please use available currency (EUR, USD, CHF)').grid(row=r, column=3, sticky='nw')
-                elif widget.get() and widget.get() in availableCurrency and r == 2:
+                elif widget.get() and widget.get().upper() in availableCurrency and r == 2:
                     currency = widget.get()
-                    print(widget.get())
-                    print('test')
                     globales.currencyList = [currency]
 
         if c == 0:
