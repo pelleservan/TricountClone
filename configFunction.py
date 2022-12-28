@@ -17,6 +17,26 @@ def createConfig():
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
 
+def addAccount():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    nb = config.getint('GENERAL', 'NumberOfSharedAccount')
+    config.set('GENERAL', 'NumberOfSharedAccount', str(nb+1))
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
+
+    for account in globales.accountList:
+        i = 0
+        config['Account/' + account] = {}
+        accountConfig = config['Account/' + account]
+        accountConfig['Currency'] = globales.currencyList[i]
+        accountConfig['fichier'] = './' + account.replace(" ", "_") + '.csv'
+        i+=1
+    
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
+
 def isConfigCreated():
     result = False
 

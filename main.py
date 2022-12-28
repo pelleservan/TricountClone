@@ -85,7 +85,7 @@ def next():
                     c = 1
                     Label(middleCreateAccountOneFrame, text='Please use available currency (EUR, USD, CHF)').grid(row=r, column=3, sticky='nw')
                 elif widget.get() and widget.get().upper() in availableCurrency and r == 2:
-                    currency = widget.get()
+                    currency = widget.get().upper()
                     globales.currencyList = [currency]
 
         if c == 0:
@@ -206,6 +206,11 @@ def finish():
     displayExpensesFrame()
 
     configFunction.createConfig()
+
+    # test ajout d'autre compte
+    # globales.accountList = ['Voyage']
+    # globales.currencyList = ['EUR']
+    # configFunction.addAccount()
 
 Button(footerCreateAccountTwoFrame, text='Back', command=lambda:back()).grid(row=0, column=0, sticky='nw')
 Button(footerCreateAccountTwoFrame, text='Finish', command=lambda:finish()).grid(row=0, column=1, sticky='ne')
