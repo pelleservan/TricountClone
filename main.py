@@ -2,9 +2,13 @@ from tkinter import *
 from datetime import date
 import globales
 import configFunction
+import csvFunction
 
 # initialise les var globales
 globales.initialize() 
+
+# participants = ['loick', 'pablo', 'jeremy']
+# csvFunction.createCSV('test', participants)
 
 isConfigCreated = configFunction.isConfigCreated()
 
@@ -141,6 +145,7 @@ def addParticipant():
 
     def saveNewParticipant():
         global newParticipantName
+        newParticipantName = []
         global footerCreateAccountTwoFrame
         global middleCreateAccountTwoFrame
 
@@ -162,7 +167,7 @@ def addParticipant():
         for widget in middleTop.winfo_children():
             if isinstance(widget, Entry):
                 if len(widget.get()) > 0:
-                    newParticipantName = widget.get()
+                    newParticipantName.append(widget.get())
                     top.destroy()
                     displayNewParticipant()
                 else:
@@ -206,6 +211,11 @@ def finish():
     displayExpensesFrame()
 
     configFunction.createConfig()
+    
+    accountName = title.replace(" ", "_")
+    listeParticipant = [globales.username]
+    listeParticipant.extend(newParticipantName)
+    csvFunction.createCSV(accountName, listeParticipant)
 
     # test ajout d'autre compte
     # globales.accountList = ['Voyage']
