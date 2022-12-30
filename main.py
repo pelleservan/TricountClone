@@ -159,7 +159,7 @@ def addParticipant():
             Button(participantFrame, text='Delete', command=lambda:participantFrame.destroy()).grid(row=r, column=1, sticky='ne')
             participantFrame.grid(row=r, column=0, sticky='nw')
 
-            footerCreateAccountTwoFrame.pack_forget()
+            footerCreateAccountTwoFrame.pack_forget() # il y a une erreur ici
             footerCreateAccountTwoFrame = Frame(createAccountTwoFrame)
             Button(footerCreateAccountTwoFrame, text='Finish').pack()
             footerCreateAccountTwoFrame.pack(side=BOTTOM, expand=True, fill=X)
@@ -213,9 +213,9 @@ def finish():
     configFunction.createConfig()
     
     accountName = title.replace(" ", "_")
-    listeParticipant = [globales.username]
-    listeParticipant.extend(newParticipantName)
-    csvFunction.createCSV(accountName, listeParticipant)
+    globales.listeParticipant = [globales.username]
+    globales.listeParticipant.extend(newParticipantName)
+    csvFunction.createCSV(accountName, globales.listeParticipant)
 
     # test ajout d'autre compte
     # globales.accountList = ['Voyage']
@@ -301,11 +301,106 @@ def displayExpensesFrame():
 
     footerExpensesFrame = Frame(expensesFrame)
 
-    Button(footerExpensesFrame, text='Add expense').grid(row=0, column=0, sticky='nw')
+    Button(footerExpensesFrame, text='Add expense', command=lambda:addExpenses()).grid(row=0, column=0, sticky='nw')
 
     footerExpensesFrame.pack(side=BOTTOM)
 
     expensesFrame.pack()
+
+def addExpenses():
+    
+    top = Toplevel(window)
+    top.title("Tricount Clone - Add Expenses")
+
+    headTop = Frame(top)
+
+    Label(headTop, text='Add Expenses').pack()
+
+    headTop.pack(side=TOP, expand=True, fill=X)
+
+    middleTop = Frame(top)
+    nameResult = StringVar()
+    costResult = StringVar()
+
+    
+
+
+    Label(middleTop, text='Expenses name').grid(row=0, column=0, sticky='nw')
+    Entry(middleTop, textvariable=nameResult).grid(row=0, column=1, sticky='nw')
+    Label(middleTop, text='Total cost').grid(row=1, column=0, sticky='nw')
+    entryCost = Entry(middleTop, textvariable=costResult)
+    entryCost.grid(row=1, column=1, sticky='nw')
+    def check_numeric(event):
+        value = entryCost.get()
+        if value.replace('.','',1).isdigit():
+            # la valeur de l'Entry est numérique
+            print("La valeur de l'Entry est numérique : " + value)
+        else:
+            # la valeur de l'Entry n'est pas numérique
+            print("La valeur de l'Entry n'est pas numérique : " + value)
+            entryCost.delete(len(value)-1, 'end')
+    entryCost.bind('<KeyRelease>', check_numeric)
+    r=2
+    checkBoxOutput = []
+
+    def updateCheckButton():
+        for i in range(len(globales.listeParticipant)):
+            print()
+
+    for name in globales.listeParticipant:
+        result = IntVar()
+        checkBoxOutput.append(result)
+        Checkbutton(middleTop, text=name, variable=result, command=updateCheckButton).grid(row=r, column=0, sticky='nw')
+        Label(middleTop, text='Cost : 0').grid(row=r, column=1, sticky='nw')
+        r+=1
+
+    
+    middleTop.pack(side=TOP, expand=True, fill=X)
+
+    footerTop = Frame(top)
+
+    def saveNewExpenses():
+        global newParticipantName
+        newParticipantName = []
+        global footerCreateAccountTwoFrame
+        global middleCreateAccountTwoFrame
+
+        print(checkBoxOutput[0].get())
+        print(costResult.get())
+        print(nameResult.get())
+
+        # def displayNewParticipant():
+        #     r=0
+        #     for widget in middleCreateAccountTwoFrame.winfo_children():
+        #         r += 1
+
+        #     participantFrame  = Frame(middleCreateAccountTwoFrame)
+        #     Label(participantFrame, text=newParticipantName).grid(row=r, column=0, sticky='nw')
+        #     Button(participantFrame, text='Delete', command=lambda:participantFrame.destroy()).grid(row=r, column=1, sticky='ne')
+        #     participantFrame.grid(row=r, column=0, sticky='nw')
+
+        #     footerCreateAccountTwoFrame.pack_forget()
+        #     footerCreateAccountTwoFrame = Frame(createAccountTwoFrame)
+        #     Button(footerCreateAccountTwoFrame, text='Finish').pack()
+        #     footerCreateAccountTwoFrame.pack(side=BOTTOM, expand=True, fill=X)
+
+        # for widget in middleTop.winfo_children():
+        #     if isinstance(widget, Entry):
+        #         if len(widget.get()) > 0:
+        #             newParticipantName.append(widget.get())
+        #             top.destroy()
+        #             displayNewParticipant()
+        #         else:
+        #             Label(middleTop, text='Specify a name').grid(row=0, column=2, sticky='nw')
+                    
+
+    def cancelNewExpenses():
+        top.destroy()
+
+    Button(footerTop, text='Ok', command=lambda:saveNewExpenses()).grid(row=0, column=0, sticky='nw')
+    Button(footerTop, text='Cancel', command=lambda:cancelNewExpenses()).grid(row=0, column=1, sticky='nw')
+
+    footerTop.pack(side=BOTTOM, expand=True, fill=X)
 
 def displayBalanceFrame():
     global balanceFrame
