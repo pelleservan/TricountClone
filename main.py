@@ -308,6 +308,19 @@ def displayExpensesFrame():
     expensesFrame.pack()
 
 def addExpenses():
+
+    def check_numeric(event):
+        value = entryCost.get()
+        if not value.replace('.','',1).isdigit():
+            entryCost.delete(len(value)-1, 'end')
+    
+    checkBoxOutput = []
+    def updateCheckButton():
+        for i in range(len(globales.listeParticipant)):
+            print()
+
+    def afficher_nom(nom):
+        print(nom)
     
     top = Toplevel(window)
     top.title("Tricount Clone - Add Expenses")
@@ -319,34 +332,26 @@ def addExpenses():
     headTop.pack(side=TOP, expand=True, fill=X)
 
     middleTop = Frame(top)
+
+    participantResult = StringVar()
+    participantResult.set(globales.listeParticipant[0])
     nameResult = StringVar()
     costResult = StringVar()
 
-    
-
-
     Label(middleTop, text='Expenses name').grid(row=0, column=0, sticky='nw')
     Entry(middleTop, textvariable=nameResult).grid(row=0, column=1, sticky='nw')
+
     Label(middleTop, text='Total cost').grid(row=1, column=0, sticky='nw')
     entryCost = Entry(middleTop, textvariable=costResult)
     entryCost.grid(row=1, column=1, sticky='nw')
-    def check_numeric(event):
-        value = entryCost.get()
-        if value.replace('.','',1).isdigit():
-            # la valeur de l'Entry est numérique
-            print("La valeur de l'Entry est numérique : " + value)
-        else:
-            # la valeur de l'Entry n'est pas numérique
-            print("La valeur de l'Entry n'est pas numérique : " + value)
-            entryCost.delete(len(value)-1, 'end')
     entryCost.bind('<KeyRelease>', check_numeric)
-    r=2
-    checkBoxOutput = []
+    
+    Label(middleTop, text='Paid by : ').grid(row=2, column=0, sticky='nw')
+    OptionMenu(middleTop, participantResult, *globales.listeParticipant).grid(row=2, column=1, sticky='nw')
 
-    def updateCheckButton():
-        for i in range(len(globales.listeParticipant)):
-            print()
+    participantResult.trace('w', lambda *args: afficher_nom(participantResult.get()))
 
+    r=3
     for name in globales.listeParticipant:
         result = IntVar()
         checkBoxOutput.append(result)
@@ -360,15 +365,19 @@ def addExpenses():
     footerTop = Frame(top)
 
     def saveNewExpenses():
-        global newParticipantName
-        newParticipantName = []
-        global footerCreateAccountTwoFrame
-        global middleCreateAccountTwoFrame
 
         print(checkBoxOutput[0].get())
         print(costResult.get())
         print(nameResult.get())
 
+        if len(nameResult.get()) > 0:
+            top.destroy()
+            displayNewExpense()
+        else:
+            Label(middleTop, text='Specify a name').grid(row=0, column=2, sticky='nw')
+
+        def displayNewExpense():
+            print()
         # def displayNewParticipant():
         #     r=0
         #     for widget in middleCreateAccountTwoFrame.winfo_children():
