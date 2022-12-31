@@ -84,6 +84,7 @@ def next():
                 elif widget.get() and len(widget.get()) < 12 and r == 1:
                     userName = widget.get()
                     globales.username = userName
+                    globales.listeParticipant = [userName]
                 #récup currency account
                 if (not widget.get() or not (widget.get().upper() in availableCurrency) ) and r == 2:
                     c = 1
@@ -145,7 +146,6 @@ def addParticipant():
 
     def saveNewParticipant():
         global newParticipantName
-        newParticipantName = []
         global footerCreateAccountTwoFrame
         global middleCreateAccountTwoFrame
 
@@ -167,7 +167,9 @@ def addParticipant():
         for widget in middleTop.winfo_children():
             if isinstance(widget, Entry):
                 if len(widget.get()) > 0:
-                    newParticipantName.append(widget.get())
+                    newParticipantName = widget.get()
+                    globales.listeParticipant.append(widget.get())
+                    print(globales.listeParticipant)
                     top.destroy()
                     displayNewParticipant()
                 else:
@@ -213,8 +215,6 @@ def finish():
     configFunction.createConfig()
     
     accountName = title.replace(" ", "_")
-    globales.listeParticipant = [globales.username]
-    globales.listeParticipant.extend(newParticipantName)
     csvFunction.createCSV(accountName, globales.listeParticipant)
 
     # test ajout d'autre compte
@@ -308,19 +308,41 @@ def displayExpensesFrame():
     expensesFrame.pack()
 
 def addExpenses():
+    participantResult = StringVar()
+    participantResult.set(globales.listeParticipant[0])
+    nameResult = StringVar()
+    costResult = StringVar()
+    checkBoxOutput = []
+    costPerParticipant = []
 
     def check_numeric(event):
         value = entryCost.get()
         if not value.replace('.','',1).isdigit():
             entryCost.delete(len(value)-1, 'end')
-    
-    checkBoxOutput = []
-    def updateCheckButton():
-        for i in range(len(globales.listeParticipant)):
-            print()
 
-    def afficher_nom(nom):
-        print(nom)
+        updateCostPerParticipant()
+    
+    def updateCheckButton():
+        updateCostPerParticipant()
+
+    def afficherNom(nom):
+        updateCostPerParticipant()
+
+    def updateCostPerParticipant():
+        nbParticipant = 0
+        for checkBoxResult in checkBoxOutput:
+            if checkBoxResult.get() == 1:
+                nbParticipant += 1
+        if costResult.get():
+            totalCost = float(costResult.get())
+        else:
+            totalCost = float(0)
+        for i in range(len(checkBoxOutput)):
+            if checkBoxOutput[i].get() == 1:
+                costPerParticipant[i].set('Cost : ' + str(totalCost/nbParticipant))
+            else:
+                costPerParticipant[i].set('Cost : 0')
+
     
     top = Toplevel(window)
     top.title("Tricount Clone - Add Expenses")
@@ -333,11 +355,6 @@ def addExpenses():
 
     middleTop = Frame(top)
 
-    participantResult = StringVar()
-    participantResult.set(globales.listeParticipant[0])
-    nameResult = StringVar()
-    costResult = StringVar()
-
     Label(middleTop, text='Expenses name').grid(row=0, column=0, sticky='nw')
     Entry(middleTop, textvariable=nameResult).grid(row=0, column=1, sticky='nw')
 
@@ -349,14 +366,18 @@ def addExpenses():
     Label(middleTop, text='Paid by : ').grid(row=2, column=0, sticky='nw')
     OptionMenu(middleTop, participantResult, *globales.listeParticipant).grid(row=2, column=1, sticky='nw')
 
-    participantResult.trace('w', lambda *args: afficher_nom(participantResult.get()))
+    participantResult.trace('w', lambda *args: afficherNom(participantResult.get()))
 
     r=3
     for name in globales.listeParticipant:
-        result = IntVar()
-        checkBoxOutput.append(result)
-        Checkbutton(middleTop, text=name, variable=result, command=updateCheckButton).grid(row=r, column=0, sticky='nw')
-        Label(middleTop, text='Cost : 0').grid(row=r, column=1, sticky='nw')
+        checkBoxresult = IntVar()
+        checkBoxresult.set(1)
+        checkBoxOutput.append(checkBoxresult)
+        Checkbutton(middleTop, text=name, variable=checkBoxresult, command=updateCheckButton).grid(row=r, column=0, sticky='nw')
+        costPerParticipantResult = StringVar()
+        costPerParticipantResult.set('Cost : 0')
+        costPerParticipant.append(costPerParticipantResult)
+        Label(middleTop, textvariable=costPerParticipantResult).grid(row=r, column=1, sticky='nw')
         r+=1
 
     
@@ -365,6 +386,9 @@ def addExpenses():
     footerTop = Frame(top)
 
     def saveNewExpenses():
+
+        def displayNewExpense():
+            print()
 
         print(checkBoxOutput[0].get())
         print(costResult.get())
@@ -376,8 +400,7 @@ def addExpenses():
         else:
             Label(middleTop, text='Specify a name').grid(row=0, column=2, sticky='nw')
 
-        def displayNewExpense():
-            print()
+        
         # def displayNewParticipant():
         #     r=0
         #     for widget in middleCreateAccountTwoFrame.winfo_children():
