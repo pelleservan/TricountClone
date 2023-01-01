@@ -3,3 +3,4 @@ def initialize():
     global accountList
     global currencyList
     global listeParticipant
+    global currentAccount

@@ -9,6 +9,7 @@ def createConfig():
     for account in globales.accountList:
         i = 0
         config['Account/' + account] = {}
+        globales.currentAccount = account
         accountConfig = config['Account/' + account]
         accountConfig['Currency'] = globales.currencyList[i]
         accountConfig['fichier'] = './' + account.replace(" ", "_") + '.csv'
@@ -44,3 +45,10 @@ def isConfigCreated():
     result = bool(config.read('config.ini'))
     print(result)
     return result
+
+def getCSVFilePath(account):
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    filepath = config.get('Account/' + account, 'fichier')
+    return filepath

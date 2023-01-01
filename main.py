@@ -3,12 +3,10 @@ from datetime import date
 import globales
 import configFunction
 import csvFunction
+import Classes
 
 # initialise les var globales
 globales.initialize() 
-
-# participants = ['loick', 'pablo', 'jeremy']
-# csvFunction.createCSV('test', participants)
 
 isConfigCreated = configFunction.isConfigCreated()
 
@@ -341,7 +339,7 @@ def addExpenses():
     def updateCheckButton():
         updateCostPerParticipant()
 
-    def afficherNom(nom):
+    def afficherNom():
         updateCostPerParticipant()
 
     def updateCostPerParticipant():
@@ -365,24 +363,24 @@ def addExpenses():
 
     headTop = Frame(top)
 
-    Label(headTop, text='Add Expenses').pack()
+    Label(headTop, text='Add Expenses', font=(font0, 30), fg=color2).pack()
 
     headTop.pack(side=TOP, expand=True, fill=X)
 
     middleTop = Frame(top)
 
-    Label(middleTop, text='Expenses name').grid(row=0, column=0, sticky='nw')
+    Label(middleTop, text='Expenses name', font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='nw')
     Entry(middleTop, textvariable=nameResult).grid(row=0, column=1, sticky='nw')
 
-    Label(middleTop, text='Total cost').grid(row=1, column=0, sticky='nw')
+    Label(middleTop, text='Total cost', font=(font1, 15), fg=color2).grid(row=1, column=0, sticky='nw')
     entryCost = Entry(middleTop, textvariable=costResult)
     entryCost.grid(row=1, column=1, sticky='nw')
     entryCost.bind('<KeyRelease>', check_numeric)
     
-    Label(middleTop, text='Paid by : ').grid(row=2, column=0, sticky='nw')
+    Label(middleTop, text='Paid by : ', font=(font1, 15), fg=color2).grid(row=2, column=0, sticky='nw')
     OptionMenu(middleTop, participantResult, *globales.listeParticipant).grid(row=2, column=1, sticky='nw')
 
-    participantResult.trace('w', lambda *args: afficherNom(participantResult.get()))
+    participantResult.trace('w', lambda *args: afficherNom())
 
     r=3
     for name in globales.listeParticipant:
@@ -393,7 +391,7 @@ def addExpenses():
         costPerParticipantResult = StringVar()
         costPerParticipantResult.set('Cost : 0')
         costPerParticipant.append(costPerParticipantResult)
-        Label(middleTop, textvariable=costPerParticipantResult).grid(row=r, column=1, sticky='nw')
+        Label(middleTop, textvariable=costPerParticipantResult, font=(font1, 15), fg=color2).grid(row=r, column=1, sticky='nw')
         r+=1
 
     
@@ -403,18 +401,25 @@ def addExpenses():
 
     def saveNewExpenses():
 
-        def displayNewExpense():
-            print()
+        def calculateExpenseForCSV(expenseName):
+            listeCoutParticipant = []
+            csvPath = configFunction.getCSVFilePath(globales.currentAccount)
+            for i in range(len(globales.listeParticipant)):
+                coutParticipant = Classes.CoutParticipant(float(costPerParticipant[i].get()[7:]), globales.listeParticipant[i])
+                listeCoutParticipant.append(coutParticipant)
+                
+            csvFunction.addLineCSV(csvPath, expenseName, listeCoutParticipant, participantResult.get())
 
-        print(checkBoxOutput[0].get())
-        print(costResult.get())
-        print(nameResult.get())
 
-        if len(nameResult.get()) > 0:
+        if len(nameResult.get()) > 0 and (len(costResult.get()) > 0 and float(costResult.get()) > 0):
             top.destroy()
-            displayNewExpense()
+            calculateExpenseForCSV(nameResult.get())
         else:
-            Label(middleTop, text='Specify a name').grid(row=0, column=2, sticky='nw')
+            if len(nameResult.get()) == 0:
+                Label(middleTop, text='Specify a name', font=(font1, 10), fg=color3).grid(row=0, column=2, sticky='nw')
+            if len(costResult.get()) == 0 or float(costResult.get()) < 0:
+                Label(middleTop, text='Specify a cost', font=(font1, 10), fg=color3).grid(row=1, column=2, sticky='nw')
+
 
         
         # def displayNewParticipant():
