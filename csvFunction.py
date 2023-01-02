@@ -1,4 +1,5 @@
 import globales
+import Classes
 import pandas as pd
 
 def createCSV(fileName, participants):
@@ -37,10 +38,35 @@ def addLineCSV(fileName, expenseName, listCoutParticipant, paidBy):
 
     for coutParticipant in listCoutParticipant:
         if coutParticipant.getParticipant() == paidBy:
+            #récup nbr de participant
+            nbParticipant = len(listCoutParticipant)
+
             # Remplir les valeurs de la nouvelle ligne
-            newDf.loc[currentIndex, coutParticipant.getParticipant()] = + float(coutParticipant.getCout())
+            newDf.loc[currentIndex, coutParticipant.getParticipant()] = + (float(coutParticipant.getCout()) * (nbParticipant - 1))
         else:
             # Remplir les valeurs de la nouvelle ligne
             newDf.loc[currentIndex, coutParticipant.getParticipant()] = - float(coutParticipant.getCout())
         
     newDf.to_csv(fileName, mode='a', index=None, header=False)
+
+def getAllExpense(fileName):
+    # Chargement le fichier CSV dans un DataFrame
+    df = pd.read_csv(fileName)
+
+    resultExpenseListe = []
+
+    for index, row in df.iterrows():
+        nbParticipant = len(globales.listeParticipant)
+        expense = Classes.Expense(row[0], 0, '') 
+        i = 1
+        for col in row[1:]:
+            if float(col) > 0:
+                expense.setPaidBy(df.columns[i])
+                total = col / (nbParticipant - 1) * nbParticipant
+                expense.setCoutTotal(total)
+            i += 1
+
+        resultExpenseListe.append(expense)
+
+    return resultExpenseListe
+    

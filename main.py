@@ -310,6 +310,13 @@ def displayExpensesFrame():
     Label(middleExepensesFrame, text='Who does it concern ?', font=(font1, 15), fg=color2).grid(row=0, column=2, sticky='nw')
     Label(middleExepensesFrame, text='For you ?', font=(font1, 15), fg=color2).grid(row=0, column=3, sticky='nw')
 
+    allExpense = csvFunction.getAllExpense(configFunction.getCSVFilePath(globales.currentAccount))
+    r=1
+    for expense in allExpense:
+        text = expense.getLibelle() + ' ' + str(expense.getCoutTotal()) + ' ' + globales.currentCurrency + ', paid by ' + expense.getPaidBy()
+        Label(middleExepensesFrame, text=text, font=(font1, 15), fg=color2).grid(row=r, column=0, sticky='nw')
+        r+=1
+
     middleExepensesFrame.pack(side=TOP, expand=True, fill=X)
 
     footerExpensesFrame = Frame(expensesFrame, width=800)
@@ -413,6 +420,8 @@ def addExpenses():
         if len(nameResult.get()) > 0 and (len(costResult.get()) > 0 and float(costResult.get()) > 0):
             top.destroy()
             calculateExpenseForCSV(nameResult.get())
+            #pour refresh la liste des expenses
+            displayExpensesFrame()
         else:
             if len(nameResult.get()) == 0:
                 Label(middleTop, text='Specify a name', font=(font1, 10), fg=color3).grid(row=0, column=2, sticky='nw')
