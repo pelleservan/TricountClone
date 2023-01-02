@@ -359,7 +359,7 @@ def addExpenses():
             totalCost = float(0)
         for i in range(len(checkBoxOutput)):
             if checkBoxOutput[i].get() == 1:
-                costPerParticipant[i].set('Cost : ' + str(totalCost/nbParticipant))
+                costPerParticipant[i].set('Cost : ' + str(round(totalCost/nbParticipant, 2)))
             else:
                 costPerParticipant[i].set('Cost : 0')
 

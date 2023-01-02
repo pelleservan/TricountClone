@@ -1,5 +1,6 @@
 import globales
 import Classes
+import math
 import pandas as pd
 
 def createCSV(fileName, participants):
@@ -62,7 +63,8 @@ def getAllExpense(fileName):
         for col in row[1:]:
             if float(col) > 0:
                 expense.setPaidBy(df.columns[i])
-                total = col / (nbParticipant - 1) * nbParticipant
+                # arrondi inferieur 
+                total = math.floor(col / (nbParticipant - 1) * nbParticipant)
                 expense.setCoutTotal(total)
             i += 1
 
