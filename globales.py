@@ -1,6 +1,5 @@
 def initialize(): 
-    global username 
-    global accountList
-    global currencyList
+    global username
     global listeParticipant
     global currentAccount
+    global currentCurrency

@@ -4,16 +4,12 @@ import globales
 def createConfig():
     config = configparser.ConfigParser()
     config['GENERAL'] = {'Username': globales.username,
-                        'NumberOfSharedAccount' : len(globales.accountList)}
+                        'NumberOfSharedAccount' : 1}
 
-    for account in globales.accountList:
-        i = 0
-        config['Account/' + account] = {}
-        globales.currentAccount = account
-        accountConfig = config['Account/' + account]
-        accountConfig['Currency'] = globales.currencyList[i]
-        accountConfig['fichier'] = './' + account.replace(" ", "_") + '.csv'
-        i+=1
+    config['Account/' + globales.currentAccount] = {}
+    accountConfig = config['Account/' + globales.currentAccount]
+    accountConfig['Currency'] = globales.currentCurrency
+    accountConfig['fichier'] = './' + globales.currentAccount.replace(" ", "_") + '.csv'
 
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
@@ -27,13 +23,10 @@ def addAccount():
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
 
-    for account in globales.accountList:
-        i = 0
-        config['Account/' + account] = {}
-        accountConfig = config['Account/' + account]
-        accountConfig['Currency'] = globales.currencyList[i]
-        accountConfig['fichier'] = './' + account.replace(" ", "_") + '.csv'
-        i+=1
+    config['Account/' + globales.currentAccount] = {}
+    accountConfig = config['Account/' + globales.currentAccount]
+    accountConfig['Currency'] = globales.currentCurrency
+    accountConfig['fichier'] = './' + globales.currentAccount.replace(" ", "_") + '.csv'
     
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
@@ -43,7 +36,6 @@ def isConfigCreated():
 
     config = configparser.ConfigParser()
     result = bool(config.read('config.ini'))
-    print(result)
     return result
 
 def getCSVFilePath(account):

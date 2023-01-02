@@ -88,7 +88,7 @@ def next():
                     Label(middleCreateAccountOneFrame, text='Please specify a title (max. 50 characters)', font=(font1, 10), fg=color3).grid(row=r, column=3, sticky='nw')
                 elif widget.get() and len(widget.get()) < 50 and r == 0:
                     title = widget.get()
-                    globales.accountList = [title]
+                    globales.currentAccount = title
                 #récup username
                 if (not widget.get() or len(widget.get()) > 12 ) and r == 1:
                     c = 1
@@ -103,7 +103,7 @@ def next():
                     Label(middleCreateAccountOneFrame, text='Please use available currency (EUR, USD, CHF)').grid(row=r, column=3, sticky='nw')
                 elif widget.get() and widget.get().upper() in availableCurrency and r == 2:
                     currency = widget.get().upper()
-                    globales.currencyList = [currency]
+                    globales.currentCurrency = currency
 
         if c == 0:
             createAccountOneFrame.pack_forget()
@@ -181,7 +181,6 @@ def addParticipant():
                 if len(widget.get()) > 0:
                     newParticipantName = widget.get()
                     globales.listeParticipant.append(widget.get())
-                    print(globales.listeParticipant)
                     top.destroy()
                     displayNewParticipant()
                 else:
@@ -224,14 +223,14 @@ def finish():
     mainFrame.pack()
     displayExpensesFrame()
 
+    # Création du fichier de config la première fois et du csv
     configFunction.createConfig()
-    
     accountName = title.replace(" ", "_")
     csvFunction.createCSV(accountName, globales.listeParticipant)
 
     # test ajout d'autre compte
-    # globales.accountList = ['Voyage']
-    # globales.currencyList = ['EUR']
+    # globales.currentAccount = ['Voyage']
+    # globales.currentCurrency = ['EUR']
     # configFunction.addAccount()
 
 Button(footerCreateAccountTwoFrame, text='Back', command=lambda:back()).grid(row=0, column=0, sticky='nw')
@@ -419,33 +418,6 @@ def addExpenses():
                 Label(middleTop, text='Specify a name', font=(font1, 10), fg=color3).grid(row=0, column=2, sticky='nw')
             if len(costResult.get()) == 0 or float(costResult.get()) < 0:
                 Label(middleTop, text='Specify a cost', font=(font1, 10), fg=color3).grid(row=1, column=2, sticky='nw')
-
-
-        
-        # def displayNewParticipant():
-        #     r=0
-        #     for widget in middleCreateAccountTwoFrame.winfo_children():
-        #         r += 1
-
-        #     participantFrame  = Frame(middleCreateAccountTwoFrame)
-        #     Label(participantFrame, text=newParticipantName).grid(row=r, column=0, sticky='nw')
-        #     Button(participantFrame, text='Delete', command=lambda:participantFrame.destroy()).grid(row=r, column=1, sticky='ne')
-        #     participantFrame.grid(row=r, column=0, sticky='nw')
-
-        #     footerCreateAccountTwoFrame.pack_forget()
-        #     footerCreateAccountTwoFrame = Frame(createAccountTwoFrame)
-        #     Button(footerCreateAccountTwoFrame, text='Finish').pack()
-        #     footerCreateAccountTwoFrame.pack(side=BOTTOM, expand=True, fill=X)
-
-        # for widget in middleTop.winfo_children():
-        #     if isinstance(widget, Entry):
-        #         if len(widget.get()) > 0:
-        #             newParticipantName.append(widget.get())
-        #             top.destroy()
-        #             displayNewParticipant()
-        #         else:
-        #             Label(middleTop, text='Specify a name').grid(row=0, column=2, sticky='nw')
-                    
 
     def cancelNewExpenses():
         top.destroy()
