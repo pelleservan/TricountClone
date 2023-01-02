@@ -1,5 +1,14 @@
 from tkinter import *
 from datetime import date
+import globales
+import configFunction
+import csvFunction
+import Classes
+
+# initialise les var globales
+globales.initialize() 
+
+isConfigCreated = configFunction.isConfigCreated()
 
 #colors
 color0 = '#323232' #background (grey)
@@ -59,6 +68,8 @@ def next():
     global createAccountTwoFrame
     global userName
     global title
+    global currency
+    availableCurrency = ['EUR', 'USD', 'CHF']
 
     if backYet == 1:
         createAccountOneFrame.pack_forget()
@@ -71,16 +82,28 @@ def next():
         for widget in middleCreateAccountOneFrame.winfo_children():
             if isinstance(widget, Entry):
                 r += 1
+                #récup title account
                 if (not widget.get() or len(widget.get()) > 50 ) and r == 0:
                     c = 1
                     Label(middleCreateAccountOneFrame, text='Please specify a title (max. 50 characters)', font=(font1, 10), fg=color3).grid(row=r, column=3, sticky='nw')
                 elif widget.get() and len(widget.get()) < 50 and r == 0:
                     title = widget.get()
+                    globales.currentAccount = title
+                #récup username
                 if (not widget.get() or len(widget.get()) > 12 ) and r == 1:
                     c = 1
                     Label(middleCreateAccountOneFrame, text='Specify your name (max. 12 characters)', font=(font1, 10), fg=color3).grid(row=r, column=3, sticky='nw')
                 elif widget.get() and len(widget.get()) < 12 and r == 1:
                     userName = widget.get()
+                    globales.username = userName
+                    globales.listeParticipant = [userName]
+                #récup currency account
+                if (not widget.get() or not (widget.get().upper() in availableCurrency) ) and r == 2:
+                    c = 1
+                    Label(middleCreateAccountOneFrame, text='Please use available currency (EUR, USD, CHF)').grid(row=r, column=3, sticky='nw')
+                elif widget.get() and widget.get().upper() in availableCurrency and r == 2:
+                    currency = widget.get().upper()
+                    globales.currentCurrency = currency
 
         if c == 0:
             createAccountOneFrame.pack_forget()
@@ -88,7 +111,7 @@ def next():
             createAccountTwoFrame.pack()
 
 def upDate():
-    global UserName
+    global UserName # c'est pas en trop ça ?
 
     partcipantFrame = Frame(middleCreateAccountTwoFrame)
     Label(partcipantFrame, text=userName, font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='w')
@@ -148,7 +171,7 @@ def addParticipant():
             Button(participantFrame, text='Delete', command=lambda:participantFrame.destroy()).grid(row=r, column=1, sticky='ne')
             participantFrame.grid(row=r, column=0, sticky='nw')
 
-            footerCreateAccountTwoFrame.pack_forget()
+            footerCreateAccountTwoFrame.pack_forget() # il y a une erreur ici
             footerCreateAccountTwoFrame = Frame(createAccountTwoFrame)
             Button(footerCreateAccountTwoFrame, text='Finish').pack()
             footerCreateAccountTwoFrame.pack(side=BOTTOM, expand=True, fill=X)
@@ -157,6 +180,7 @@ def addParticipant():
             if isinstance(widget, Entry):
                 if len(widget.get()) > 0:
                     newParticipantName = widget.get()
+                    globales.listeParticipant.append(widget.get())
                     top.destroy()
                     displayNewParticipant()
                 else:
@@ -198,6 +222,16 @@ def finish():
     createAccountTwoFrame.pack_forget()
     mainFrame.pack()
     displayExpensesFrame()
+
+    # Création du fichier de config la première fois et du csv
+    configFunction.createConfig()
+    accountName = title.replace(" ", "_")
+    csvFunction.createCSV(accountName, globales.listeParticipant)
+
+    # test ajout d'autre compte
+    # globales.currentAccount = ['Voyage']
+    # globales.currentCurrency = ['EUR']
+    # configFunction.addAccount()
 
 Button(footerCreateAccountTwoFrame, text='Back', command=lambda:back()).grid(row=0, column=0, sticky='nw')
 Button(footerCreateAccountTwoFrame, text='Finish', command=lambda:finish()).grid(row=0, column=1, sticky='ne')
@@ -280,11 +314,118 @@ def displayExpensesFrame():
 
     footerExpensesFrame = Frame(expensesFrame, width=800)
 
-    Button(footerExpensesFrame, text='Add expense').grid(row=0, column=0, sticky='nw')
+    Button(footerExpensesFrame, text='Add expense', command=lambda:addExpenses()).grid(row=0, column=0, sticky='nw')
 
     footerExpensesFrame.pack(side=BOTTOM, expand=True, fill=X)
 
     expensesFrame.pack(expand=True, fill=X)
+
+def addExpenses():
+    participantResult = StringVar()
+    participantResult.set(globales.listeParticipant[0])
+    nameResult = StringVar()
+    costResult = StringVar()
+    checkBoxOutput = []
+    costPerParticipant = []
+
+    def check_numeric(event):
+        value = entryCost.get()
+        if not value.replace('.','',1).isdigit():
+            entryCost.delete(len(value)-1, 'end')
+
+        updateCostPerParticipant()
+    
+    def updateCheckButton():
+        updateCostPerParticipant()
+
+    def afficherNom():
+        updateCostPerParticipant()
+
+    def updateCostPerParticipant():
+        nbParticipant = 0
+        for checkBoxResult in checkBoxOutput:
+            if checkBoxResult.get() == 1:
+                nbParticipant += 1
+        if costResult.get():
+            totalCost = float(costResult.get())
+        else:
+            totalCost = float(0)
+        for i in range(len(checkBoxOutput)):
+            if checkBoxOutput[i].get() == 1:
+                costPerParticipant[i].set('Cost : ' + str(totalCost/nbParticipant))
+            else:
+                costPerParticipant[i].set('Cost : 0')
+
+    
+    top = Toplevel(window)
+    top.title("Tricount Clone - Add Expenses")
+
+    headTop = Frame(top)
+
+    Label(headTop, text='Add Expenses', font=(font0, 30), fg=color2).pack()
+
+    headTop.pack(side=TOP, expand=True, fill=X)
+
+    middleTop = Frame(top)
+
+    Label(middleTop, text='Expenses name', font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='nw')
+    Entry(middleTop, textvariable=nameResult).grid(row=0, column=1, sticky='nw')
+
+    Label(middleTop, text='Total cost', font=(font1, 15), fg=color2).grid(row=1, column=0, sticky='nw')
+    entryCost = Entry(middleTop, textvariable=costResult)
+    entryCost.grid(row=1, column=1, sticky='nw')
+    entryCost.bind('<KeyRelease>', check_numeric)
+    
+    Label(middleTop, text='Paid by : ', font=(font1, 15), fg=color2).grid(row=2, column=0, sticky='nw')
+    OptionMenu(middleTop, participantResult, *globales.listeParticipant).grid(row=2, column=1, sticky='nw')
+
+    participantResult.trace('w', lambda *args: afficherNom())
+
+    r=3
+    for name in globales.listeParticipant:
+        checkBoxresult = IntVar()
+        checkBoxresult.set(1)
+        checkBoxOutput.append(checkBoxresult)
+        Checkbutton(middleTop, text=name, variable=checkBoxresult, command=updateCheckButton).grid(row=r, column=0, sticky='nw')
+        costPerParticipantResult = StringVar()
+        costPerParticipantResult.set('Cost : 0')
+        costPerParticipant.append(costPerParticipantResult)
+        Label(middleTop, textvariable=costPerParticipantResult, font=(font1, 15), fg=color2).grid(row=r, column=1, sticky='nw')
+        r+=1
+
+    
+    middleTop.pack(side=TOP, expand=True, fill=X)
+
+    footerTop = Frame(top)
+
+    def saveNewExpenses():
+
+        def calculateExpenseForCSV(expenseName):
+            listeCoutParticipant = []
+            csvPath = configFunction.getCSVFilePath(globales.currentAccount)
+            for i in range(len(globales.listeParticipant)):
+                coutParticipant = Classes.CoutParticipant(float(costPerParticipant[i].get()[7:]), globales.listeParticipant[i])
+                listeCoutParticipant.append(coutParticipant)
+                
+            csvFunction.addLineCSV(csvPath, expenseName, listeCoutParticipant, participantResult.get())
+
+
+        if len(nameResult.get()) > 0 and (len(costResult.get()) > 0 and float(costResult.get()) > 0):
+            top.destroy()
+            calculateExpenseForCSV(nameResult.get())
+        else:
+            if len(nameResult.get()) == 0:
+                Label(middleTop, text='Specify a name', font=(font1, 10), fg=color3).grid(row=0, column=2, sticky='nw')
+            if len(costResult.get()) == 0 or float(costResult.get()) < 0:
+                Label(middleTop, text='Specify a cost', font=(font1, 10), fg=color3).grid(row=1, column=2, sticky='nw')
+
+    def cancelNewExpenses():
+        top.destroy()
+
+    Button(footerTop, text='Ok', command=lambda:saveNewExpenses()).grid(row=0, column=0, sticky='nw')
+    Button(footerTop, text='Cancel', command=lambda:cancelNewExpenses()).grid(row=0, column=1, sticky='nw')
+
+    footerTop.pack(side=BOTTOM, expand=True, fill=X)
 
 def displayBalanceFrame():
     global balanceFrame
