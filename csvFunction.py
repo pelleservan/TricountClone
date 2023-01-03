@@ -41,9 +41,12 @@ def addLineCSV(fileName, expenseName, listCoutParticipant, paidBy):
         if coutParticipant.getParticipant() == paidBy:
             #récup nbr de participant
             nbParticipant = len(listCoutParticipant)
-
-            # Remplir les valeurs de la nouvelle ligne
-            newDf.loc[currentIndex, coutParticipant.getParticipant()] = + (float(coutParticipant.getCout()) * (nbParticipant - 1))
+            if nbParticipant > 1:
+                # Remplir les valeurs de la nouvelle ligne
+                newDf.loc[currentIndex, coutParticipant.getParticipant()] = + (float(coutParticipant.getCout()) * (nbParticipant - 1))
+            else:
+                # Remplir les valeurs de la nouvelle ligne
+                newDf.loc[currentIndex, coutParticipant.getParticipant()] = + float(coutParticipant.getCout())
         else:
             # Remplir les valeurs de la nouvelle ligne
             newDf.loc[currentIndex, coutParticipant.getParticipant()] = - float(coutParticipant.getCout())
@@ -61,14 +64,49 @@ def getAllExpense(fileName):
         expense = Classes.Expense(row[0], 0, '') 
         i = 1
         for col in row[1:]:
-            if float(col) > 0:
+            if float(col) > 0 and nbParticipant > 1:
                 expense.setPaidBy(df.columns[i])
                 # arrondi inferieur 
                 total = math.floor(col / (nbParticipant - 1) * nbParticipant)
+                expense.setCoutTotal(total)
+            else:
+                expense.setPaidBy(df.columns[i])
+                # arrondi inferieur 
+                total = round(col,2)
                 expense.setCoutTotal(total)
             i += 1
 
         resultExpenseListe.append(expense)
 
     return resultExpenseListe
+
+def getExpensePerParticipant(fileName):
+    # Chargement le fichier CSV dans un DataFrame
+    df = pd.read_csv(fileName)
+
+    resultParticipantTotal = []
+
+    participantNames = df.columns[1:]
+
+    for name in participantNames:
+        nameValues = df[name].to_list()
+        total = 0
+        for val in nameValues:
+            total += float(val)
+        participantTotal = Classes.ParticipantTotal(name, total)
+        resultParticipantTotal.append(participantTotal)
+    
+    return resultParticipantTotal
+
+def isCSVEmpty(fileName):
+    # Chargement le fichier CSV dans un DataFrame
+    df = pd.read_csv(fileName)
+
+    result = False
+
+    # vérif si le dataframe est vide
+    if df.empty:
+        result = True
+
+    return result
     

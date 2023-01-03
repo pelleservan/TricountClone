@@ -471,10 +471,18 @@ def displayBalanceFrame():
 
     leftMiddleBalanceFrame = Frame(balanceFrame, width=800)
 
-    #a faire en fonction du compte
-    Label(leftMiddleBalanceFrame, text='user', font=(font1, 15), fg=color2).grid(row=0, column=0, sticky='nw')
-    Label(leftMiddleBalanceFrame, text='user', font=(font1, 15), fg=color2).grid(row=0, column=1, sticky='nw')
-    Label(leftMiddleBalanceFrame, text='user', font=(font1, 15), fg=color2).grid(row=0, column=2, sticky='nw')
+    participantTotalListe = csvFunction.getExpensePerParticipant(configFunction.getCSVFilePath(globales.currentAccount))
+
+    isCsvEmpty = csvFunction.isCSVEmpty(configFunction.getCSVFilePath(globales.currentAccount))
+
+    r = 0
+    for participantTotal in participantTotalListe:
+        if not isCsvEmpty:
+            text = participantTotal.getNom() + ' : ' + str(participantTotal.getTotal()) + ' ' + globales.currentCurrency
+            Label(leftMiddleBalanceFrame, text=text, font=(font1, 15), fg=color2).grid(row=r, column=0, sticky='nw')
+        else:
+            Label(leftMiddleBalanceFrame, text=participantTotal.getNom() + ' : 0 ' + globales.currentCurrency, font=(font1, 15), fg=color2).grid(row=r, column=0, sticky='nw')
+        r+=1
 
     leftMiddleBalanceFrame.pack(side=LEFT, expand=True, fill=X)
 

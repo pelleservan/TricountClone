@@ -35,3 +35,14 @@ class Expense:
     
     def display(self):
         print('Libelle : ' + self.libelle + '/ Cout Total : ' + str(self.coutTotal) + '/ Payé par : ' + self.paidBy)
+
+class ParticipantTotal:
+    def __init__(self, nom, total):
+        self.nom = nom
+        self.total = total
+
+    def getNom(self):
+        return self.nom
+    
+    def getTotal(self):
+        return self.total
