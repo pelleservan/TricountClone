@@ -15,6 +15,7 @@ color0 = '#323232' #background (grey)
 color1 = '#FFA500' #font title (orange)
 color2 = 'white' #font text (white)
 color3 = '#FF4C4C' #font warning message (red)
+color4 = '#27C400' #green
 
 #fonts
 font0 = 'DIN Condensed' #title
@@ -479,7 +480,10 @@ def displayBalanceFrame():
     for participantTotal in participantTotalListe:
         if not isCsvEmpty:
             text = participantTotal.getNom() + ' : ' + str(participantTotal.getTotal()) + ' ' + globales.currentCurrency
-            Label(leftMiddleBalanceFrame, text=text, font=(font1, 15), fg=color2).grid(row=r, column=0, sticky='nw')
+            if participantTotal.getTotal() > 0:
+                Label(leftMiddleBalanceFrame, text=text, font=(font1, 15), fg=color2, bg=color4).grid(row=r, column=0, sticky='nw')
+            else:
+                Label(leftMiddleBalanceFrame, text=text, font=(font1, 15), fg=color2, bg=color3).grid(row=r, column=0, sticky='nw')
         else:
             Label(leftMiddleBalanceFrame, text=participantTotal.getNom() + ' : 0 ' + globales.currentCurrency, font=(font1, 15), fg=color2).grid(row=r, column=0, sticky='nw')
         r+=1

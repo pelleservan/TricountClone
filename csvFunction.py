@@ -69,7 +69,7 @@ def getAllExpense(fileName):
                 # arrondi inferieur 
                 total = math.floor(col / (nbParticipant - 1) * nbParticipant)
                 expense.setCoutTotal(total)
-            else:
+            elif nbParticipant == 1 :
                 expense.setPaidBy(df.columns[i])
                 # arrondi inferieur 
                 total = round(col,2)
