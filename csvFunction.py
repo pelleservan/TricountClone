@@ -109,4 +109,12 @@ def isCSVEmpty(fileName):
         result = True
 
     return result
+
+def getAllParticipant(fileName):
+    # Chargement le fichier CSV dans un DataFrame
+    df = pd.read_csv(fileName)
+
+    participantNames = df.columns[1:]
+    
+    return participantNames
     

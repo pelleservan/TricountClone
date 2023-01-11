@@ -1,5 +1,6 @@
 import configparser #https://docs.python.org/3/library/configparser.html
 import globales
+import csvFunction
 
 def createConfig():
     config = configparser.ConfigParser()
@@ -44,3 +45,14 @@ def getCSVFilePath(account):
 
     filepath = config.get('Account/' + account, 'fichier')
     return filepath
+
+def InitConfig():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    sections = config.sections()
+    accountName = sections[1][8:]
+    accountConfig = config[sections[1]]
+    globales.currentCurrency = accountConfig['currency']
+    globales.currentAccount = accountName
+    globales.username = config['GENERAL']['username']
+    globales.listeParticipant = csvFunction.getAllParticipant(accountConfig['fichier'])

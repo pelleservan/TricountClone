@@ -8,8 +8,6 @@ import Classes
 # initialise les var globales
 globales.initialize() 
 
-isConfigCreated = configFunction.isConfigCreated()
-
 #colors
 color0 = '#323232' #background (grey)
 color1 = '#FFA500' #font title (orange)
@@ -30,218 +28,215 @@ window.geometry('800x400')
 # set window background color
 window.configure(bg=color0)
 
+def createAccount():
+    #page création 1
+    createAccountOneFrame = Frame(window)
+    createAccountOneFrame.config(bg=color0)
 
-createAccountOneFrame = Frame(window)
-createAccountOneFrame.config(bg=color0)
+    headCreateAccountOneFrame = Frame(createAccountOneFrame)
+    headCreateAccountOneFrame.config(bg=color0)
 
-headCreateAccountOneFrame = Frame(createAccountOneFrame)
-headCreateAccountOneFrame.config(bg=color0)
+    Label(headCreateAccountOneFrame, text='Create an account 1/2', font=(font0, 50), fg=color1, bg=color0).grid(row=0, column=0, sticky='nw')
+    Label(headCreateAccountOneFrame, text='Choose an explicit title and give more information in the description', font=(font0, 30), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
 
-Label(headCreateAccountOneFrame, text='Create an account 1/2', font=(font0, 50), fg=color1, bg=color0).grid(row=0, column=0, sticky='nw')
-Label(headCreateAccountOneFrame, text='Choose an explicit title and give more information in the description', font=(font0, 30), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
+    headCreateAccountOneFrame.pack(side=TOP, expand=True, fill=BOTH)
 
-headCreateAccountOneFrame.pack(side=TOP, expand=True, fill=BOTH)
+    middleCreateAccountOneFrame = Frame(createAccountOneFrame)
+    middleCreateAccountOneFrame.config(bg=color0)
 
-middleCreateAccountOneFrame = Frame(createAccountOneFrame)
-middleCreateAccountOneFrame.config(bg=color0)
+    title = 'none'
+    Label(middleCreateAccountOneFrame, text='Title :', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
+    Entry(middleCreateAccountOneFrame, width=50).grid(row=0, column=1)
+    Label(middleCreateAccountOneFrame, text='Please specify a title (max. 50 characters)', font=(font1, 10), fg=color2, bg=color0).grid(row=0, column=3, sticky='nw')
 
-title = 'none'
-Label(middleCreateAccountOneFrame, text='Title :', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
-Entry(middleCreateAccountOneFrame, width=50).grid(row=0, column=1)
-Label(middleCreateAccountOneFrame, text='Please specify a title (max. 50 characters)', font=(font1, 10), fg=color2, bg=color0).grid(row=0, column=3, sticky='nw')
+    userName = 'none'
+    Label(middleCreateAccountOneFrame, text='Your name :', font=(font1, 15), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
+    Entry(middleCreateAccountOneFrame, width=50).grid(row=1, column=1)
+    Label(middleCreateAccountOneFrame, text='Specify your name (max. 12 characters)', font=(font1, 10), fg=color2, bg=color0).grid(row=1, column=3, sticky='nw')
 
-userName = 'none'
-Label(middleCreateAccountOneFrame, text='Your name :', font=(font1, 15), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
-Entry(middleCreateAccountOneFrame, width=50).grid(row=1, column=1)
-Label(middleCreateAccountOneFrame, text='Specify your name (max. 12 characters)', font=(font1, 10), fg=color2, bg=color0).grid(row=1, column=3, sticky='nw')
+    Label(middleCreateAccountOneFrame, text='Currency  :', font=(font1, 15), fg=color2, bg=color0).grid(row=2, column=0, sticky='nw')
+    cu = Entry(middleCreateAccountOneFrame, width=50)
+    cu.insert(0, "EUR")
+    cu.grid(row=2, column=1)
+    Label(middleCreateAccountOneFrame, text='(EUR, USD, CHF, ...)', font=(font1, 10), fg=color2, bg=color0).grid(row=2, column=3, sticky='nw')
 
-Label(middleCreateAccountOneFrame, text='Currency  :', font=(font1, 15), fg=color2, bg=color0).grid(row=2, column=0, sticky='nw')
-cu = Entry(middleCreateAccountOneFrame, width=50)
-cu.insert(0, "EUR")
-cu.grid(row=2, column=1)
-Label(middleCreateAccountOneFrame, text='(EUR, USD, CHF, ...)', font=(font1, 10), fg=color2, bg=color0).grid(row=2, column=3, sticky='nw')
+    Label(middleCreateAccountOneFrame, text='Description  :', font=(font1, 15), fg=color2, bg=color0).grid(row=3, column=0, sticky='nw')
+    Entry(middleCreateAccountOneFrame, width=50).grid(row=3, column=1)
 
-Label(middleCreateAccountOneFrame, text='Description  :', font=(font1, 15), fg=color2, bg=color0).grid(row=3, column=0, sticky='nw')
-Entry(middleCreateAccountOneFrame, width=50).grid(row=3, column=1)
+    middleCreateAccountOneFrame.pack(side=TOP, expand=True, fill=BOTH)
 
-middleCreateAccountOneFrame.pack(side=TOP, expand=True, fill=BOTH)
+    #page création 2 
+    createAccountTwoFrame = Frame(window)
+    createAccountTwoFrame.config(bg=color0)
 
-def next():
-    global createAccountOneFrame
-    global createAccountTwoFrame
-    global userName
-    global title
-    global currency
-    availableCurrency = ['EUR', 'USD', 'CHF']
+    headCreateAccountTwoFrame = Frame(createAccountTwoFrame)
+    headCreateAccountTwoFrame.config(bg=color0)
 
-    if backYet == 1:
-        createAccountOneFrame.pack_forget()
-        createAccountTwoFrame.pack()
+    Label(headCreateAccountTwoFrame, text='Create an account 2/2', font=(font0, 50), fg=color1, bg=color0).grid(row=0, column=0, sticky='nw')
+    Label(headCreateAccountTwoFrame, text='List the people involved in the accounts', font=(font0, 30), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
 
-    elif backYet == 0:
+    headCreateAccountTwoFrame.pack(side=TOP, expand=True, fill=X)
 
-        c = 0
-        r = -1
-        for widget in middleCreateAccountOneFrame.winfo_children():
-            if isinstance(widget, Entry):
-                r += 1
-                #récup title account
-                if (not widget.get() or len(widget.get()) > 50 ) and r == 0:
-                    c = 1
-                    Label(middleCreateAccountOneFrame, text='Please specify a title (max. 50 characters)', font=(font1, 10), fg=color3).grid(row=r, column=3, sticky='nw')
-                elif widget.get() and len(widget.get()) < 50 and r == 0:
-                    title = widget.get()
-                    globales.currentAccount = title
-                #récup username
-                if (not widget.get() or len(widget.get()) > 12 ) and r == 1:
-                    c = 1
-                    Label(middleCreateAccountOneFrame, text='Specify your name (max. 12 characters)', font=(font1, 10), fg=color3).grid(row=r, column=3, sticky='nw')
-                elif widget.get() and len(widget.get()) < 12 and r == 1:
-                    userName = widget.get()
-                    globales.username = userName
-                    globales.listeParticipant = [userName]
-                #récup currency account
-                if (not widget.get() or not (widget.get().upper() in availableCurrency) ) and r == 2:
-                    c = 1
-                    Label(middleCreateAccountOneFrame, text='Please use available currency (EUR, USD, CHF)').grid(row=r, column=3, sticky='nw')
-                elif widget.get() and widget.get().upper() in availableCurrency and r == 2:
-                    currency = widget.get().upper()
-                    globales.currentCurrency = currency
+    middleCreateAccountTwoFrame = Frame(createAccountTwoFrame)
+    middleCreateAccountTwoFrame.config(bg=color0)
 
-        if c == 0:
+    footerCreateAccountTwoFrame = Frame(createAccountTwoFrame)
+    footerCreateAccountTwoFrame.config(bg=color0)
+
+    def next():
+        global userName
+        global title
+        global currency
+        availableCurrency = ['EUR', 'USD', 'CHF']
+
+        if backYet == 1:
             createAccountOneFrame.pack_forget()
-            upDate()
             createAccountTwoFrame.pack()
 
-def upDate():
-    global UserName # c'est pas en trop ça ?
+        elif backYet == 0:
 
-    partcipantFrame = Frame(middleCreateAccountTwoFrame)
-    partcipantFrame.config(bg=color0)
-    Label(partcipantFrame, text=userName, font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='w')
-    Label(partcipantFrame, text=' (this is your name)', font=(font1, 10), fg=color2, bg=color0).grid(row=0, column=1, sticky='w')
-    partcipantFrame.grid(row=0, column=0, sticky='nw')
+            c = 0
+            r = -1
+            for widget in middleCreateAccountOneFrame.winfo_children():
+                if isinstance(widget, Entry):
+                    r += 1
+                    #récup title account
+                    if (not widget.get() or len(widget.get()) > 50 ) and r == 0:
+                        c = 1
+                        Label(middleCreateAccountOneFrame, text='Please specify a title (max. 50 characters)', font=(font1, 10), fg=color3).grid(row=r, column=3, sticky='nw')
+                    elif widget.get() and len(widget.get()) < 50 and r == 0:
+                        title = widget.get()
+                        globales.currentAccount = title
+                    #récup username
+                    if (not widget.get() or len(widget.get()) > 12 ) and r == 1:
+                        c = 1
+                        Label(middleCreateAccountOneFrame, text='Specify your name (max. 12 characters)', font=(font1, 10), fg=color3).grid(row=r, column=3, sticky='nw')
+                    elif widget.get() and len(widget.get()) < 12 and r == 1:
+                        userName = widget.get()
+                        globales.username = userName
+                        globales.listeParticipant = [userName]
+                    #récup currency account
+                    if (not widget.get() or not (widget.get().upper() in availableCurrency) ) and r == 2:
+                        c = 1
+                        Label(middleCreateAccountOneFrame, text='Please use available currency (EUR, USD, CHF)').grid(row=r, column=3, sticky='nw')
+                    elif widget.get() and widget.get().upper() in availableCurrency and r == 2:
+                        currency = widget.get().upper()
+                        globales.currentCurrency = currency
 
-Button(createAccountOneFrame, text='Continue', command=lambda:next()).pack()
+            if c == 0:
+                createAccountOneFrame.pack_forget()
+                upDate()
+                createAccountTwoFrame.pack()
 
-createAccountOneFrame.pack()
+    def upDate():
 
-createAccountTwoFrame = Frame(window)
-createAccountTwoFrame.config(bg=color0)
+        partcipantFrame = Frame(middleCreateAccountTwoFrame)
+        partcipantFrame.config(bg=color0)
+        Label(partcipantFrame, text=globales.username, font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='w')
+        Label(partcipantFrame, text=' (this is your name)', font=(font1, 10), fg=color2, bg=color0).grid(row=0, column=1, sticky='w')
+        partcipantFrame.grid(row=0, column=0, sticky='nw')
 
-headCreateAccountTwoFrame = Frame(createAccountTwoFrame)
-headCreateAccountTwoFrame.config(bg=color0)
+    Button(createAccountOneFrame, text='Continue', command=lambda:next()).pack()
 
-Label(headCreateAccountTwoFrame, text='Create an account 2/2', font=(font0, 50), fg=color1, bg=color0).grid(row=0, column=0, sticky='nw')
-Label(headCreateAccountTwoFrame, text='List the people involved in the accounts', font=(font0, 30), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
-
-headCreateAccountTwoFrame.pack(side=TOP, expand=True, fill=X)
-
-middleCreateAccountTwoFrame = Frame(createAccountTwoFrame)
-middleCreateAccountTwoFrame.config(bg=color0)
-
-#content set in upDate()
-
-def addParticipant():
-    top = Toplevel(window)
-    top.title("Tricount Clone - Add participant")
-
-    headTop = Frame(top)
-    headTop.config(bg=color0)
-
-    Label(headTop, text='Add participant', font=(font0, 30), fg=color2, bg=color0).pack()
-
-    headTop.pack(side=TOP, expand=True, fill=X)
-
-    middleTop = Frame(top)
-    middleTop.config(bg=color0)
-
-    Label(middleTop, text='His name', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
-    Entry(middleTop).grid(row=0, column=1, sticky='nw')
-
-    middleTop.pack(side=TOP, expand=True, fill=X)
-
-    footerTop = Frame(top)
-    footerTop.config(bg=color0)
-
-    def saveNewParticipant():
-        global newParticipantName
-        global footerCreateAccountTwoFrame
-        global middleCreateAccountTwoFrame
-
-        def displayNewParticipant():
-            r=0
-            for widget in middleCreateAccountTwoFrame.winfo_children():
-                r += 1
-
-            participantFrame  = Frame(middleCreateAccountTwoFrame)
-            participantFrame.config(bg=color0)
-            Label(participantFrame, text=newParticipantName, font=(font1, 15), fg=color2, bg=color0).grid(row=r, column=0, sticky='nw')
-            Button(participantFrame, text='Delete', command=lambda:participantFrame.destroy()).grid(row=r, column=1, sticky='ne')
-            participantFrame.grid(row=r, column=0, sticky='nw')
-
-        for widget in middleTop.winfo_children():
-            if isinstance(widget, Entry):
-                if len(widget.get()) > 0:
-                    newParticipantName = widget.get()
-                    globales.listeParticipant.append(widget.get())
-                    top.destroy()
-                    displayNewParticipant()
-                else:
-                    Label(middleTop, text='Specify a name').grid(row=0, column=2, sticky='nw')
-                    
-
-    def cancelNewParticipant():
-        top.destroy()
-
-    Button(footerTop, text='Ok', command=lambda:saveNewParticipant()).grid(row=0, column=0, sticky='nw')
-    Button(footerTop, text='Cancel', command=lambda:cancelNewParticipant()).grid(row=0, column=1, sticky='nw')
-
-    footerTop.pack(side=BOTTOM, expand=True, fill=X)
-
-middleCreateAccountTwoFrame.pack(side=TOP, expand=True, fill=X)
-
-Button(createAccountTwoFrame, text='Add participant', command=lambda:addParticipant()).pack(side=TOP)
-
-footerCreateAccountTwoFrame = Frame(createAccountTwoFrame)
-footerCreateAccountTwoFrame.config(bg=color0)
-
-backYet = 0
-
-def back():
-    global backYet
-
-    createAccountTwoFrame.pack_forget()
     createAccountOneFrame.pack()
 
-    backYet = 1
+    #content set in upDate()
 
-def deleteParticipent():
-    for widget in middleCreateAccountTwoFrame.winfo_children():
-        if isinstance(widget, Button):
-            if widget['state'] == 'normal':
-                widget.pack_forget()
+    def addParticipant():
+        top = Toplevel(window)
+        top.title("Tricount Clone - Add participant")
 
-def finish():
-    upDateHead()
-    createAccountTwoFrame.pack_forget()
-    mainFrame.pack()
-    displayExpensesFrame()
+        headTop = Frame(top)
+        headTop.config(bg=color0)
 
-    # Création du fichier de config la première fois et du csv
-    configFunction.createConfig()
-    accountName = title.replace(" ", "_")
-    csvFunction.createCSV(accountName, globales.listeParticipant)
+        Label(headTop, text='Add participant', font=(font0, 30), fg=color2, bg=color0).pack()
 
-    # test ajout d'autre compte
-    # globales.currentAccount = ['Voyage']
-    # globales.currentCurrency = ['EUR']
-    # configFunction.addAccount()
+        headTop.pack(side=TOP, expand=True, fill=X)
 
-Button(footerCreateAccountTwoFrame, text='Back', command=lambda:back()).grid(row=0, column=0, sticky='nw')
-Button(footerCreateAccountTwoFrame, text='Finish', command=lambda:finish()).grid(row=0, column=1, sticky='ne')
+        middleTop = Frame(top)
+        middleTop.config(bg=color0)
 
-footerCreateAccountTwoFrame.pack(side=BOTTOM, expand=True, fill=X)
+        Label(middleTop, text='His name', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
+        Entry(middleTop).grid(row=0, column=1, sticky='nw')
+
+        middleTop.pack(side=TOP, expand=True, fill=X)
+
+        footerTop = Frame(top)
+        footerTop.config(bg=color0)
+
+        def saveNewParticipant():
+            newParticipantName = StringVar()
+
+            def displayNewParticipant():
+                r=0
+                for widget in middleCreateAccountTwoFrame.winfo_children():
+                    r += 1
+
+                participantFrame  = Frame(middleCreateAccountTwoFrame)
+                participantFrame.config(bg=color0)
+                Label(participantFrame, textvariable=newParticipantName, font=(font1, 15), fg=color2, bg=color0).grid(row=r, column=0, sticky='nw')
+                Button(participantFrame, text='Delete', command=lambda:deleteParticipant()).grid(row=r, column=1, sticky='ne')
+                participantFrame.grid(row=r, column=0, sticky='nw')
+
+                def deleteParticipant():
+                    globales.listeParticipant.remove(newParticipantName.get())
+                    participantFrame.destroy()
+
+            for widget in middleTop.winfo_children():
+                if isinstance(widget, Entry):
+                    if len(widget.get()) > 0:
+                        newParticipantName.set(widget.get())
+                        globales.listeParticipant.append(widget.get())
+                        top.destroy()
+                        displayNewParticipant()
+                    else:
+                        Label(middleTop, text='Specify a name').grid(row=0, column=2, sticky='nw')
+                        
+
+        def cancelNewParticipant():
+            top.destroy()
+
+        Button(footerTop, text='Ok', command=lambda:saveNewParticipant()).grid(row=0, column=0, sticky='nw')
+        Button(footerTop, text='Cancel', command=lambda:cancelNewParticipant()).grid(row=0, column=1, sticky='nw')
+
+        footerTop.pack(side=BOTTOM, expand=True, fill=X)
+
+    middleCreateAccountTwoFrame.pack(side=TOP, expand=True, fill=X)
+
+    Button(createAccountTwoFrame, text='Add participant', command=lambda:addParticipant()).pack(side=TOP)
+
+    backYet = 0
+
+    def back():
+        global backYet
+
+        createAccountTwoFrame.pack_forget()
+        createAccountOneFrame.pack()
+
+        backYet = 1
+
+    def finish():
+        upDateHead()
+        createAccountTwoFrame.pack_forget()
+        mainFrame.pack()
+
+        # Création du fichier de config la première fois et du csv
+        configFunction.createConfig()
+        accountName = globales.currentAccount.replace(" ", "_")
+        csvFunction.createCSV(accountName, globales.listeParticipant)
+
+        displayExpensesFrame()
+        
+
+    Button(footerCreateAccountTwoFrame, text='Back', command=lambda:back()).grid(row=0, column=0, sticky='nw')
+    Button(footerCreateAccountTwoFrame, text='Finish', command=lambda:finish()).grid(row=0, column=1, sticky='ne')
+
+    footerCreateAccountTwoFrame.pack(side=BOTTOM, expand=True, fill=X)
+
+isConfigCreated = configFunction.isConfigCreated()
+
+if isConfigCreated:
+    configFunction.InitConfig()
 
 mainFrame = Frame(window)
 
@@ -253,9 +248,9 @@ def upDateHead():
 
     titleFrame = Frame(headMainFrame, width=800)
     titleFrame.config(bg=color0)
-    Label(titleFrame, text="Comptes '"+str(title)+"'", font=(font0, 50), fg=color1, bg=color0).grid(row=0, column=0, sticky='nw')
+    Label(titleFrame, text="Comptes '"+str(globales.currentAccount)+"'", font=(font0, 50), fg=color1, bg=color0).grid(row=0, column=0, sticky='nw')
     titleFrame.pack(side=TOP, expand=True, fill=X)
-    Label(headMainFrame, text='Created by '+str(userName)+', on '+str(date.today()), font=(font0, 30), fg=color2, bg=color0).pack(side=LEFT, expand=True, fill=X)
+    Label(headMainFrame, text='Created by '+str(globales.username)+', on '+str(date.today()), font=(font0, 30), fg=color2, bg=color0).pack(side=LEFT, expand=True, fill=X)
 
     buttonHeadMainFrame = Frame(headMainFrame)
     buttonHeadMainFrame.config(bg=color0)
@@ -266,6 +261,7 @@ def upDateHead():
 
     buttonHeadMainFrame.pack(side=RIGHT, expand=True, fill=X)
 
+# init Main frame
 headMainFrame = Frame(mainFrame, width=800)
 headMainFrame.config(bg=color0)
 
@@ -276,6 +272,19 @@ middleMainFrame.config(bg=color0)
 
 headMiddleMainFrame = Frame(middleMainFrame, width=800)
 headMiddleMainFrame.config(bg=color0)
+
+contentMiddleMainFrame = Frame(middleMainFrame, width=800)
+contentMiddleMainFrame.config(bg=color0)
+
+#Init onglet frame
+expensesFrame = Frame(middleMainFrame, width=800)
+expensesFrame.config(bg=color0)
+balanceFrame = Frame(middleMainFrame, width=800)
+balanceFrame.config(bg=color0)
+shareFrame = Frame(middleMainFrame, width=800)
+shareFrame.config(bg=color0)
+settingFrame = Frame(middleMainFrame, width=800)
+settingFrame.config(bg=color0)
 
 Button(headMiddleMainFrame, text='Expenses', command=lambda:displayExpensesFrame(), bg=color1).pack(side=LEFT, expand=True, fill=X)
 Button(headMiddleMainFrame, text='Balance', command=lambda:displayBalanceFrame()).pack(side=LEFT, expand=True, fill=X)
@@ -303,7 +312,7 @@ def displayExpensesFrame():
         global headExpensesFrame
 
         Label(headExpensesFrame, text='List of expenses', font=(font1, 15), fg=color2, bg=color0).pack(side=LEFT)
-        Label(headExpensesFrame, text='You are identified as '+str(userName), font=(font1, 15), fg=color2, bg=color0).pack(side=RIGHT)
+        Label(headExpensesFrame, text='You are identified as '+str(globales.username), font=(font1, 15), fg=color2, bg=color0).pack(side=RIGHT)
 
         headExpensesFrame.pack(side=TOP, expand=True, fill=X)
 
@@ -468,7 +477,7 @@ def displayBalanceFrame():
         global headBalanceFrame
 
         Label(headBalanceFrame, text='The reds owe the greens', font=(font1, 15), fg=color2, bg=color0).pack(side=LEFT)
-        Label(headBalanceFrame, text='You are identified as '+str(userName), font=(font1, 15), fg=color2, bg=color0).pack(side=RIGHT)
+        Label(headBalanceFrame, text='You are identified as '+str(globales.username), font=(font1, 15), fg=color2, bg=color0).pack(side=RIGHT)
 
         headBalanceFrame.pack(side=TOP, expand=True, fill=X)
 
@@ -527,7 +536,7 @@ def displayShareFrame():
         global headShareFrame
 
         Label(headShareFrame, text='Invite friends to participate in the accounts', font=(font1, 15), fg=color2, bg=color0).pack(side=LEFT)
-        Label(headShareFrame, text='You are identified as '+str(userName), font=(font1, 15), fg=color2, bg=color0).pack(side=RIGHT)
+        Label(headShareFrame, text='You are identified as '+str(globales.username), font=(font1, 15), fg=color2, bg=color0).pack(side=RIGHT)
 
         headShareFrame.pack(side=TOP, expand=True, fill=X)
 
@@ -546,7 +555,7 @@ def displayShareFrame():
     contentMiddleShareFrame.config(bg=color0)
 
     Label(contentMiddleShareFrame, text='Copy the text below into an email and send it to the group :', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
-    Label(contentMiddleShareFrame, text='The '+str(title)+' accounts are accessible on Tricount :', font=(font1, 15), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
+    Label(contentMiddleShareFrame, text='The '+str(globales.currentAccount)+' accounts are accessible on Tricount :', font=(font1, 15), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
     Label(contentMiddleShareFrame, text='To access :', font=(font1, 15), fg=color2, bg=color0).grid(row=2, column=0, sticky='nw')
     Label(contentMiddleShareFrame, text='• From your mobile device, download the Tricount app', font=(font1, 15), fg=color2, bg=color0).grid(row=3, column=0, sticky='nw')
     Label(contentMiddleShareFrame, text=' (for iPhone, Android and Windows) and then follow the link :', font=(font1, 15), fg=color2, bg=color0).grid(row=4, column=0, sticky='nw')
@@ -573,7 +582,7 @@ def displaySettingFrame():
         global headSettingFrame
 
         Label(headSettingFrame, text='General information', font=(font1, 15), fg=color2, bg=color0).pack(side=LEFT)
-        Label(headSettingFrame, text='You are identified as '+str(userName), font=(font1, 15), fg=color2, bg=color0).pack(side=RIGHT)
+        Label(headSettingFrame, text='You are identified as '+str(globales.username), font=(font1, 15), fg=color2, bg=color0).pack(side=RIGHT)
 
         headSettingFrame.pack(side=TOP, expand=True, fill=X)
 
@@ -590,7 +599,7 @@ def displaySettingFrame():
 
     Label(middleSettingFrame, text='Title :', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
     ti = Entry(middleSettingFrame, width=50)
-    ti.insert(0, title)
+    ti.insert(0, globales.currentAccount)
     ti.grid(row=0, column=1, sticky='nw')
 
     Label(middleSettingFrame, text='Currency :', font=(font1, 15), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
@@ -606,17 +615,12 @@ def displaySettingFrame():
 
     settingFrame.pack(expand=True, fill=X)
 
-contentMiddleMainFrame = Frame(middleMainFrame, width=800)
-contentMiddleMainFrame.config(bg=color0)
-
-expensesFrame = Frame(middleMainFrame, width=800)
-expensesFrame.config(bg=color0)
-balanceFrame = Frame(middleMainFrame, width=800)
-balanceFrame.config(bg=color0)
-shareFrame = Frame(middleMainFrame, width=800)
-shareFrame.config(bg=color0)
-settingFrame = Frame(middleMainFrame, width=800)
-settingFrame.config(bg=color0)
+if not isConfigCreated:
+    createAccount()
+else:
+    upDateHead()
+    mainFrame.pack()
+    displayExpensesFrame()
 
 contentMiddleMainFrame.pack(side=TOP, expand=True, fill=X)
 
