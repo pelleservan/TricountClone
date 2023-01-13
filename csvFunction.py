@@ -38,18 +38,22 @@ def addLineCSV(fileName, expenseName, listCoutParticipant, paidBy):
     newDf.loc[currentIndex, 'LibelleDepense'] = expenseName
 
     for coutParticipant in listCoutParticipant:
+        cout = 0
         if coutParticipant.getParticipant() == paidBy:
             #récup nbr de participant
             nbParticipant = len(listCoutParticipant)
             if nbParticipant > 1:
-                # Remplir les valeurs de la nouvelle ligne
-                newDf.loc[currentIndex, coutParticipant.getParticipant()] = + (float(coutParticipant.getCout()) * (nbParticipant - 1))
+                # calcul du cout
+                cout = + (float(coutParticipant.getCout()) * (nbParticipant - 1))
             else:
-                # Remplir les valeurs de la nouvelle ligne
-                newDf.loc[currentIndex, coutParticipant.getParticipant()] = + float(coutParticipant.getCout())
+                # calcul du cout
+                cout = + float(coutParticipant.getCout())
         else:
-            # Remplir les valeurs de la nouvelle ligne
-            newDf.loc[currentIndex, coutParticipant.getParticipant()] = - float(coutParticipant.getCout())
+            # calcul du cout
+            cout = - float(coutParticipant.getCout())
+            
+        # Remplir les valeurs de la nouvelle ligne
+        newDf.loc[currentIndex, coutParticipant.getParticipant()] = cout
         
     newDf.to_csv(fileName, mode='a', index=None, header=False)
 
