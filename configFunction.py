@@ -11,6 +11,8 @@ def createConfig():
     accountConfig = config['Account/' + globales.currentAccount]
     accountConfig['Currency'] = globales.currentCurrency
     accountConfig['fichier'] = './' + globales.currentAccount.replace(" ", "_") + '.csv'
+    if globales.currentDescription :
+        accountConfig['description'] = globales.currentDescription
 
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
@@ -28,6 +30,7 @@ def addAccount():
     accountConfig = config['Account/' + globales.currentAccount]
     accountConfig['Currency'] = globales.currentCurrency
     accountConfig['fichier'] = './' + globales.currentAccount.replace(" ", "_") + '.csv'
+    accountConfig['description'] = globales.currentDescription
     
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
@@ -53,6 +56,7 @@ def InitConfig():
     accountName = sections[1][8:]
     accountConfig = config[sections[1]]
     globales.currentCurrency = accountConfig['currency']
+    globales.currentDescription = accountConfig['description']
     globales.currentAccount = accountName
     globales.username = config['GENERAL']['username']
     globales.listeParticipant = csvFunction.getAllParticipant(accountConfig['fichier'])
