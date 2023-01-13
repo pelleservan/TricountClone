@@ -289,10 +289,14 @@ shareFrame.config(bg=color0)
 settingFrame = Frame(middleMainFrame, width=1366)
 settingFrame.config(bg=color0)
 
-Button(headMiddleMainFrame, text='Expenses', command=lambda:displayExpensesFrame(), bg=color1).pack(side=LEFT, expand=True, fill=X)
-Button(headMiddleMainFrame, text='Balance', command=lambda:displayBalanceFrame()).pack(side=LEFT, expand=True, fill=X)
-Button(headMiddleMainFrame, text='Share', command=lambda:displayShareFrame()).pack(side=LEFT, expand=True, fill=X)
-Button(headMiddleMainFrame, text='Settings', command=lambda:displaySettingFrame()).pack(side=RIGHT, expand=True, fill=X)
+expenseButton = Button(headMiddleMainFrame, text='Expenses', command=lambda:displayExpensesFrame(), bg=color1)
+expenseButton.pack(side=LEFT, expand=True, fill=X)
+balanceButton = Button(headMiddleMainFrame, text='Balance', command=lambda:displayBalanceFrame())
+balanceButton.pack(side=LEFT, expand=True, fill=X)
+shareButton = Button(headMiddleMainFrame, text='Share', command=lambda:displayShareFrame())
+shareButton.pack(side=LEFT, expand=True, fill=X)
+settingsButton = Button(headMiddleMainFrame, text='Settings', command=lambda:displaySettingFrame())
+settingsButton.pack(side=RIGHT, expand=True, fill=X)
 
 headMiddleMainFrame.pack(side=TOP, fill=X)
 
@@ -303,6 +307,11 @@ def clearFrame(inputFrame):
 def displayExpensesFrame():
     global expensesFrame
     global contentMiddleMainFrame
+
+    expenseButton.configure(bg=color1)
+    balanceButton.configure(bg='white')
+    shareButton.configure(bg='white')
+    settingsButton.configure(bg='white')
 
     clearFrame(contentMiddleMainFrame)
 
@@ -469,6 +478,11 @@ def displayBalanceFrame():
     global balanceFrame
     global contentMiddleMainFrame
 
+    expenseButton.configure(bg='white')
+    balanceButton.configure(bg=color1)
+    shareButton.configure(bg='white')
+    settingsButton.configure(bg='white')
+
     clearFrame(contentMiddleMainFrame)
 
     if balanceFrame:
@@ -528,6 +542,11 @@ def displayShareFrame():
     global shareFrame
     global contentMiddleMainFrame
 
+    expenseButton.configure(bg='white')
+    balanceButton.configure(bg='white')
+    shareButton.configure(bg=color1)
+    settingsButton.configure(bg='white')
+
     clearFrame(contentMiddleMainFrame)
 
     if shareFrame :
@@ -573,6 +592,11 @@ def displayShareFrame():
 def displaySettingFrame():
     global settingFrame
     global contentMiddleMainFrame
+
+    expenseButton.configure(bg='white')
+    balanceButton.configure(bg='white')
+    shareButton.configure(bg='white')
+    settingsButton.configure(bg=color1)
 
     clearFrame(contentMiddleMainFrame)
 
