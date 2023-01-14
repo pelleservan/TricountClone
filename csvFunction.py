@@ -26,7 +26,6 @@ def addLineCSV(fileName, expenseName, listCoutParticipant, paidBy):
         # Création d'une nouvelle ligne
         df.loc[1] = empty_row
         currentIndex = 1
-
     else:
         # Récup de la dernière ligne du DataFrame
         last_row = df.index[-1]
@@ -53,7 +52,6 @@ def addLineCSV(fileName, expenseName, listCoutParticipant, paidBy):
                 i = 0
                 while float(listCoutParticipant[i].getCout()) == 0:
                     i+=1
-                
                 # calcul du cout
                 cout = + (float(listCoutParticipant[i].getCout()) * nbParticipant)
             elif nbParticipant > 1:
