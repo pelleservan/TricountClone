@@ -6,6 +6,7 @@ import pandas as pd
 def createCSV(fileName, participants):
 
     header = ['LibelleDepense']
+    header.append('nbParticipants')
     header.extend(participants)
     df = pd.DataFrame(columns=header)
 
@@ -25,7 +26,6 @@ def addLineCSV(fileName, expenseName, listCoutParticipant, paidBy):
         # Création d'une nouvelle ligne
         df.loc[1] = empty_row
         currentIndex = 1
-
     else:
         # Récup de la dernière ligne du DataFrame
         last_row = df.index[-1]
@@ -33,16 +33,28 @@ def addLineCSV(fileName, expenseName, listCoutParticipant, paidBy):
         df.loc[last_row+1] = empty_row
         currentIndex = last_row+1
     
-    # Ajout du libelle 
+    #récup nbr de participant
+    nbParticipant = 0
+    for coutParticipant in listCoutParticipant:
+        if float(coutParticipant.getCout()) != 0:
+            nbParticipant += 1
+
+    # Ajout du libelle + nb participant
     newDf = pd.DataFrame(dtype=object)
     newDf.loc[currentIndex, 'LibelleDepense'] = expenseName
+    newDf.loc[currentIndex, 'nbParticipants'] = nbParticipant
 
     for coutParticipant in listCoutParticipant:
         cout = 0
         if coutParticipant.getParticipant() == paidBy:
-            #récup nbr de participant
-            nbParticipant = len(listCoutParticipant)
-            if nbParticipant > 1:
+            if nbParticipant > 1 and float(coutParticipant.getCout()) == 0:
+                # cas particulier personne qui paye n'est pas concerné
+                i = 0
+                while float(listCoutParticipant[i].getCout()) == 0:
+                    i+=1
+                # calcul du cout
+                cout = + (float(listCoutParticipant[i].getCout()) * nbParticipant)
+            elif nbParticipant > 1:
                 # calcul du cout
                 cout = + (float(coutParticipant.getCout()) * (nbParticipant - 1))
             else:
@@ -54,7 +66,7 @@ def addLineCSV(fileName, expenseName, listCoutParticipant, paidBy):
             
         # Remplir les valeurs de la nouvelle ligne
         newDf.loc[currentIndex, coutParticipant.getParticipant()] = cout
-        
+    
     newDf.to_csv(fileName, mode='a', index=None, header=False)
 
 def getAllExpense(fileName):
@@ -64,14 +76,15 @@ def getAllExpense(fileName):
     resultExpenseListe = []
 
     for index, row in df.iterrows():
-        nbParticipant = len(globales.listeParticipant)
+        nbParticipant = row[1]
         expense = Classes.Expense(row[0], 0, '') 
-        i = 1
-        for col in row[1:]:
+        i = 2
+        for col in row[2:]:
             if float(col) > 0 and nbParticipant > 1:
                 expense.setPaidBy(df.columns[i])
+            elif float(col) < 0 and nbParticipant > 1:
                 # arrondi inferieur 
-                total = math.floor(col / (nbParticipant - 1) * nbParticipant)
+                total = math.floor(-1 * col * nbParticipant)
                 expense.setCoutTotal(total)
             elif nbParticipant == 1 :
                 expense.setPaidBy(df.columns[i])
@@ -90,13 +103,14 @@ def getExpensePerParticipant(fileName):
 
     resultParticipantTotal = []
 
-    participantNames = df.columns[1:]
+    participantNames = df.columns[2:]
 
     for name in participantNames:
         nameValues = df[name].to_list()
         total = 0
         for val in nameValues:
             total += float(val)
+        total = round(total,2)
         participantTotal = Classes.ParticipantTotal(name, total)
         resultParticipantTotal.append(participantTotal)
     
@@ -118,7 +132,7 @@ def getAllParticipant(fileName):
     # Chargement le fichier CSV dans un DataFrame
     df = pd.read_csv(fileName)
 
-    participantNames = df.columns[1:]
+    participantNames = df.columns[2:]
     
     return participantNames
     

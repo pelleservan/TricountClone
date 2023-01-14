@@ -24,7 +24,7 @@ window = Tk()
 # set window title
 window.title("Tricount Clone")
 # set window width and height
-window.geometry('800x400')
+window.geometry('1366x768')
 # set window background color
 window.configure(bg=color0)
 
@@ -122,6 +122,9 @@ def createAccount():
                     elif widget.get() and widget.get().upper() in availableCurrency and r == 2:
                         currency = widget.get().upper()
                         globales.currentCurrency = currency
+                    #récup description
+                    if widget.get() and len(widget.get()) > 0 and r == 3:
+                        globales.currentDescription = widget.get()
 
             if c == 0:
                 createAccountOneFrame.pack_forget()
@@ -246,7 +249,7 @@ def upDateHead():
     for widget in headMainFrame.winfo_children():
         widget.pack_forget()
 
-    titleFrame = Frame(headMainFrame, width=800)
+    titleFrame = Frame(headMainFrame, width=1366)
     titleFrame.config(bg=color0)
     Label(titleFrame, text="Comptes '"+str(globales.currentAccount)+"'", font=(font0, 50), fg=color1, bg=color0).grid(row=0, column=0, sticky='nw')
     titleFrame.pack(side=TOP, expand=True, fill=X)
@@ -262,34 +265,38 @@ def upDateHead():
     buttonHeadMainFrame.pack(side=RIGHT, expand=True, fill=X)
 
 # init Main frame
-headMainFrame = Frame(mainFrame, width=800)
+headMainFrame = Frame(mainFrame, width=1366)
 headMainFrame.config(bg=color0)
 
 headMainFrame.pack(side=TOP, expand=True, fill=X)
 
-middleMainFrame = Frame(mainFrame, width=800)
+middleMainFrame = Frame(mainFrame, width=1366)
 middleMainFrame.config(bg=color0)
 
-headMiddleMainFrame = Frame(middleMainFrame, width=800)
+headMiddleMainFrame = Frame(middleMainFrame, width=1366)
 headMiddleMainFrame.config(bg=color0)
 
-contentMiddleMainFrame = Frame(middleMainFrame, width=800)
+contentMiddleMainFrame = Frame(middleMainFrame, width=1366)
 contentMiddleMainFrame.config(bg=color0)
 
 #Init onglet frame
-expensesFrame = Frame(middleMainFrame, width=800)
+expensesFrame = Frame(middleMainFrame, width=1366)
 expensesFrame.config(bg=color0)
-balanceFrame = Frame(middleMainFrame, width=800)
+balanceFrame = Frame(middleMainFrame, width=1366)
 balanceFrame.config(bg=color0)
-shareFrame = Frame(middleMainFrame, width=800)
+shareFrame = Frame(middleMainFrame, width=1366)
 shareFrame.config(bg=color0)
-settingFrame = Frame(middleMainFrame, width=800)
+settingFrame = Frame(middleMainFrame, width=1366)
 settingFrame.config(bg=color0)
 
-Button(headMiddleMainFrame, text='Expenses', command=lambda:displayExpensesFrame(), bg=color1).pack(side=LEFT, expand=True, fill=X)
-Button(headMiddleMainFrame, text='Balance', command=lambda:displayBalanceFrame()).pack(side=LEFT, expand=True, fill=X)
-Button(headMiddleMainFrame, text='Share', command=lambda:displayShareFrame()).pack(side=LEFT, expand=True, fill=X)
-Button(headMiddleMainFrame, text='Settings', command=lambda:displaySettingFrame()).pack(side=RIGHT, expand=True, fill=X)
+expenseButton = Button(headMiddleMainFrame, text='Expenses', command=lambda:displayExpensesFrame(), bg=color1)
+expenseButton.pack(side=LEFT, expand=True, fill=X)
+balanceButton = Button(headMiddleMainFrame, text='Balance', command=lambda:displayBalanceFrame())
+balanceButton.pack(side=LEFT, expand=True, fill=X)
+shareButton = Button(headMiddleMainFrame, text='Share', command=lambda:displayShareFrame())
+shareButton.pack(side=LEFT, expand=True, fill=X)
+settingsButton = Button(headMiddleMainFrame, text='Settings', command=lambda:displaySettingFrame())
+settingsButton.pack(side=RIGHT, expand=True, fill=X)
 
 headMiddleMainFrame.pack(side=TOP, fill=X)
 
@@ -301,11 +308,16 @@ def displayExpensesFrame():
     global expensesFrame
     global contentMiddleMainFrame
 
+    expenseButton.configure(bg=color1)
+    balanceButton.configure(bg='white')
+    shareButton.configure(bg='white')
+    settingsButton.configure(bg='white')
+
     clearFrame(contentMiddleMainFrame)
 
     if expensesFrame :
         expensesFrame.pack_forget()
-        expensesFrame = Frame(contentMiddleMainFrame, width=800)
+        expensesFrame = Frame(contentMiddleMainFrame, width=1366)
         expensesFrame.config(bg=color0)
 
     def upDateHeadExpeses():
@@ -317,14 +329,14 @@ def displayExpensesFrame():
         headExpensesFrame.pack(side=TOP, expand=True, fill=X)
 
     global headExpensesFrame
-    headExpensesFrame = Frame(expensesFrame, width=800)
+    headExpensesFrame = Frame(expensesFrame, width=1366)
     headExpensesFrame.config(bg=color0)
     #Content set in upDateHeadExpeses()
     headExpensesFrame.pack(side=TOP, expand=True, fill=X)
 
     upDateHeadExpeses()
 
-    middleExepensesFrame = Frame(expensesFrame, width=800)
+    middleExepensesFrame = Frame(expensesFrame, width=1366)
     middleExepensesFrame.config(bg=color0)
 
     Label(middleExepensesFrame, text='Who paid, how much and why ?', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
@@ -341,7 +353,7 @@ def displayExpensesFrame():
 
     middleExepensesFrame.pack(side=TOP, expand=True, fill=X)
 
-    footerExpensesFrame = Frame(expensesFrame, width=800)
+    footerExpensesFrame = Frame(expensesFrame, width=1366)
     footerExpensesFrame.config(bg=color0)
 
     Button(footerExpensesFrame, text='Add expense', command=lambda:addExpenses()).grid(row=0, column=0, sticky='nw')
@@ -466,11 +478,16 @@ def displayBalanceFrame():
     global balanceFrame
     global contentMiddleMainFrame
 
+    expenseButton.configure(bg='white')
+    balanceButton.configure(bg=color1)
+    shareButton.configure(bg='white')
+    settingsButton.configure(bg='white')
+
     clearFrame(contentMiddleMainFrame)
 
     if balanceFrame:
         balanceFrame.pack_forget()
-        balanceFrame = Frame(contentMiddleMainFrame, width=800)
+        balanceFrame = Frame(contentMiddleMainFrame, width=1366)
         balanceFrame.config(bg=color0)
 
     def upDateHeadBalance():
@@ -482,14 +499,14 @@ def displayBalanceFrame():
         headBalanceFrame.pack(side=TOP, expand=True, fill=X)
 
     global headBalanceFrame
-    headBalanceFrame = Frame(balanceFrame, width=800)
+    headBalanceFrame = Frame(balanceFrame, width=1366)
     headBalanceFrame.config(bg=color0)
     #Content set in upDateHeadBalance()
     headBalanceFrame.pack(side=TOP)
 
     upDateHeadBalance()
 
-    rightMiddleBalanceFrame = Frame(balanceFrame, width=800)
+    rightMiddleBalanceFrame = Frame(balanceFrame, width=1366)
     rightMiddleBalanceFrame.config(bg=color0)
 
     #a faire en fonction du compte
@@ -498,7 +515,7 @@ def displayBalanceFrame():
 
     rightMiddleBalanceFrame.pack(side=RIGHT, expand=True, fill=X)
 
-    leftMiddleBalanceFrame = Frame(balanceFrame, width=800)
+    leftMiddleBalanceFrame = Frame(balanceFrame, width=1366)
     leftMiddleBalanceFrame.config(bg=color0)
 
     participantTotalListe = csvFunction.getExpensePerParticipant(configFunction.getCSVFilePath(globales.currentAccount))
@@ -525,11 +542,16 @@ def displayShareFrame():
     global shareFrame
     global contentMiddleMainFrame
 
+    expenseButton.configure(bg='white')
+    balanceButton.configure(bg='white')
+    shareButton.configure(bg=color1)
+    settingsButton.configure(bg='white')
+
     clearFrame(contentMiddleMainFrame)
 
     if shareFrame :
         shareFrame.pack_forget()
-        shareFrame = Frame(contentMiddleMainFrame, width=800)
+        shareFrame = Frame(contentMiddleMainFrame, width=1366)
         shareFrame.config(bg=color0)
 
     def upDateHeadShare():
@@ -541,17 +563,17 @@ def displayShareFrame():
         headShareFrame.pack(side=TOP, expand=True, fill=X)
 
     global headShareFrame
-    headShareFrame = Frame(shareFrame, width=800)
+    headShareFrame = Frame(shareFrame, width=1366)
     headShareFrame.config(bg=color0)
     #Content set in upDateHeadExpeses()
     headShareFrame.pack(side=TOP, expand=True, fill=X)
 
     upDateHeadShare()
 
-    middleShareFrame = Frame(shareFrame, width=800)
+    middleShareFrame = Frame(shareFrame, width=1366)
     middleShareFrame.config(bg=color0)
     
-    contentMiddleShareFrame = Frame(middleShareFrame, width=800)
+    contentMiddleShareFrame = Frame(middleShareFrame, width=1366)
     contentMiddleShareFrame.config(bg=color0)
 
     Label(contentMiddleShareFrame, text='Copy the text below into an email and send it to the group :', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
@@ -571,11 +593,16 @@ def displaySettingFrame():
     global settingFrame
     global contentMiddleMainFrame
 
+    expenseButton.configure(bg='white')
+    balanceButton.configure(bg='white')
+    shareButton.configure(bg='white')
+    settingsButton.configure(bg=color1)
+
     clearFrame(contentMiddleMainFrame)
 
     if settingFrame :
         settingFrame.pack_forget()
-        settingFrame = Frame(contentMiddleMainFrame, width=800)
+        settingFrame = Frame(contentMiddleMainFrame, width=1366)
         settingFrame.config(bg=color0)
 
     def upDateHeadSetting():
@@ -587,14 +614,14 @@ def displaySettingFrame():
         headSettingFrame.pack(side=TOP, expand=True, fill=X)
 
     global headSettingFrame
-    headSettingFrame = Frame(shareFrame, width=800)
+    headSettingFrame = Frame(shareFrame, width=1366)
     headSettingFrame.config(bg=color0)
     #Content set in upDateHeadExpeses()
     headSettingFrame.pack(side=TOP, expand=True, fill=X)
 
     upDateHeadSetting()
 
-    middleSettingFrame = Frame(settingFrame, width=800)
+    middleSettingFrame = Frame(settingFrame, width=1366)
     middleSettingFrame.config(bg=color0)
 
     Label(middleSettingFrame, text='Title :', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
@@ -606,7 +633,9 @@ def displaySettingFrame():
     Label(middleSettingFrame, text=globales.currentCurrency, font=(font1, 15), fg=color2, bg=color0).grid(row=1, column=1, sticky='nw')
 
     Label(middleSettingFrame, text='Description :', font=(font1, 15), fg=color2, bg=color0).grid(row=2, column=0, sticky='nw')
-    Entry(middleSettingFrame, width=50).grid(row=2, column=1, sticky='nw')
+    desc = Entry(middleSettingFrame, width=50)
+    desc.insert(0, globales.currentDescription)
+    desc.grid(row=2, column=1, sticky='nw')
 
     Label(middleSettingFrame, text='Groupe', font=(font1, 15), fg=color2, bg=color0).grid(row=3, column=0, sticky='nw')
     Button(middleSettingFrame, text='Add participant').grid(row=3, column=1, sticky='nw')
