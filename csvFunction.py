@@ -48,7 +48,15 @@ def addLineCSV(fileName, expenseName, listCoutParticipant, paidBy):
     for coutParticipant in listCoutParticipant:
         cout = 0
         if coutParticipant.getParticipant() == paidBy:
-            if nbParticipant > 1:
+            if nbParticipant > 1 and float(coutParticipant.getCout()) == 0:
+                # cas particulier personne qui paye n'est pas concerné
+                i = 0
+                while float(listCoutParticipant[i].getCout()) == 0:
+                    i+=1
+                
+                # calcul du cout
+                cout = + (float(listCoutParticipant[i].getCout()) * nbParticipant)
+            elif nbParticipant > 1:
                 # calcul du cout
                 cout = + (float(coutParticipant.getCout()) * (nbParticipant - 1))
             else:
@@ -76,8 +84,9 @@ def getAllExpense(fileName):
         for col in row[2:]:
             if float(col) > 0 and nbParticipant > 1:
                 expense.setPaidBy(df.columns[i])
+            elif float(col) < 0 and nbParticipant > 1:
                 # arrondi inferieur 
-                total = math.floor(col / (nbParticipant - 1) * nbParticipant)
+                total = math.floor(-1 * col * nbParticipant)
                 expense.setCoutTotal(total)
             elif nbParticipant == 1 :
                 expense.setPaidBy(df.columns[i])
