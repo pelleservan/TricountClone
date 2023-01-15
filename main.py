@@ -4,6 +4,7 @@ import globales
 import configFunction
 import csvFunction
 import Classes
+import pdfManager
 
 # initialise les var globales
 globales.initialize()
@@ -300,7 +301,7 @@ def upDateHead():
     buttonHeadMainFrame = Frame(headMainFrame)
     buttonHeadMainFrame.config(bg=color0)
 
-    Button(buttonHeadMainFrame, text='Print', width=10).pack(side=LEFT, expand=True, fill=X)
+    Button(buttonHeadMainFrame, text='Print', command=lambda: pdfManager.editPDF(globales.currentAccount, globales.username), width=10).pack(side=LEFT, expand=True, fill=X)
     Button(buttonHeadMainFrame, text='Creat account', command=lambda: createAccount(), width=10).pack(side=LEFT,
                                                                                                       expand=True,
                                                                                                       fill=X)

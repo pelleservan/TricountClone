@@ -8,6 +8,7 @@ import pandas as pd
 
 import tkinter as tk
 import os
+import configFunction
 
 def editPDF(currentAccount, username):
     popup = tk.Tk()
@@ -41,7 +42,7 @@ def editPDF(currentAccount, username):
 
     content.append(Paragraph("Created by "+str(username), subTitle['Normal']))
 
-    currentAccountExpensesFile = './'+str(currentAccount.replace(" ", "_"))+'.csv'
+    currentAccountExpensesFile = configFunction.getCSVFilePath(currentAccount)
     expenses = pd.read_csv(currentAccountExpensesFile)
 
     content.append(Paragraph("Participants : "+str(', '.join(expenses.columns[2:].to_list())), style))
@@ -49,10 +50,10 @@ def editPDF(currentAccount, username):
     content.append(Paragraph("Expenses :", subTitle['Normal']))
     expenses = expenses.drop('nbParticipants', axis=1)
     expenses[expenses.columns[3:]] = expenses[expenses.columns[3:]].astype(float)
-    expenses = expenses.rename(columns={'LibelleDepense': 'Lebele'})
+    expenses = expenses.rename(columns={'LibelleDepense': 'title'})
     expenses['Total'] = expenses[expenses.columns[1:-1]].max(axis=1)
 
-    total = {'Lebele' : 'Total'}
+    total = {'title' : 'Total'}
 
     for col in expenses.columns[1:]:
         total[col] = round(expenses[col].sum(), 2)
@@ -73,7 +74,7 @@ def editPDF(currentAccount, username):
 
     content.append(expensesTable)
 
-    content.append(Paragraph("Balence :", subTitle['Normal']))
+    content.append(Paragraph("Balance :", subTitle['Normal']))
 
     for participant in expenses.columns[1:-1]:
         value = expenses.loc[expenses.index[-1], participant]
