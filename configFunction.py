@@ -49,14 +49,28 @@ def getCSVFilePath(account):
     filepath = config.get('Account/' + account, 'fichier')
     return filepath
 
-def InitConfig():
+def InitConfig(index = 1):
     config = configparser.ConfigParser()
     config.read('config.ini')
     sections = config.sections()
-    accountName = sections[1][8:]
-    accountConfig = config[sections[1]]
+    accountName = sections[index][8:]
+    accountConfig = config[sections[index]]
     globales.currentCurrency = accountConfig['currency']
     globales.currentDescription = accountConfig['description']
     globales.currentAccount = accountName
     globales.username = config['GENERAL']['username']
     globales.listeParticipant = csvFunction.getAllParticipant(accountConfig['fichier'])
+
+def InitUser():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    globales.username = config['GENERAL']['username']
+
+def getAccountListe():
+    result = []
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    sections = config.sections()[1:]
+    for section in sections:
+        result.append(section[8:])
+    return result

@@ -29,6 +29,10 @@ window.geometry('1366x768')
 window.configure(bg=color0)
 
 def createAccount():
+    if mainFrame:
+        mainFrame.pack_forget()
+        globales.initialize() 
+
     #page création 1
     createAccountOneFrame = Frame(window)
     createAccountOneFrame.config(bg=color0)
@@ -51,7 +55,13 @@ def createAccount():
 
     userName = 'none'
     Label(middleCreateAccountOneFrame, text='Your name :', font=(font1, 15), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
-    Entry(middleCreateAccountOneFrame, width=50).grid(row=1, column=1)
+    name = Entry(middleCreateAccountOneFrame, width=50)
+    if configFunction.isConfigCreated():
+        configFunction.InitUser()
+        userName = globales.username
+        name.insert(0, userName)
+        name.config(state='disabled')
+    name.grid(row=1, column=1)
     Label(middleCreateAccountOneFrame, text='Specify your name (max. 12 characters)', font=(font1, 10), fg=color2, bg=color0).grid(row=1, column=3, sticky='nw')
 
     Label(middleCreateAccountOneFrame, text='Currency  :', font=(font1, 15), fg=color2, bg=color0).grid(row=2, column=0, sticky='nw')
@@ -223,10 +233,16 @@ def createAccount():
         createAccountTwoFrame.pack_forget()
         mainFrame.pack()
 
-        # Création du fichier de config la première fois et du csv
-        configFunction.createConfig()
-        accountName = globales.currentAccount.replace(" ", "_")
-        csvFunction.createCSV(accountName, globales.listeParticipant)
+        if not configFunction.isConfigCreated():
+            # Création du fichier de config la première fois et du csv
+            configFunction.createConfig()
+            accountName = globales.currentAccount.replace(" ", "_")
+            csvFunction.createCSV(accountName, globales.listeParticipant)
+        else:
+            # Ajout du nouveau compte dans le fichier de config et creation du csv
+            configFunction.addAccount()
+            accountName = globales.currentAccount.replace(" ", "_")
+            csvFunction.createCSV(accountName, globales.listeParticipant)
 
         displayExpensesFrame()
         
@@ -259,7 +275,7 @@ def upDateHead():
     buttonHeadMainFrame.config(bg=color0)
 
     Button(buttonHeadMainFrame, text='Print', width=10).pack(side=LEFT, expand=True, fill=X)
-    Button(buttonHeadMainFrame, text='Creat account', width=10).pack(side=LEFT, expand=True, fill=X)
+    Button(buttonHeadMainFrame, text='Creat account', command=lambda:createAccount(), width=10).pack(side=LEFT, expand=True, fill=X)
     Button(buttonHeadMainFrame, text='Exit', command=lambda:window.destroy(), width=10).pack(side=RIGHT, expand=True, fill=X)
 
     buttonHeadMainFrame.pack(side=RIGHT, expand=True, fill=X)
@@ -432,6 +448,7 @@ def addExpenses():
         checkBoxOutput.append(checkBoxresult)
         Checkbutton(middleTop, text=name, variable=checkBoxresult, command=updateCheckButton, font=(font1, 15), fg=color2, bg=color0, selectcolor=color0).grid(row=r, column=0, sticky='nw')
         costPerParticipantResult = StringVar()
+
         costPerParticipantResult.set('Cost : 0')
         costPerParticipant.append(costPerParticipantResult)
         Label(middleTop, textvariable=costPerParticipantResult, font=(font1, 15), fg=color2, bg=color0).grid(row=r, column=1, sticky='nw')
@@ -593,10 +610,19 @@ def displaySettingFrame():
     global settingFrame
     global contentMiddleMainFrame
 
+    accountListeResult = StringVar()
+    accountListeResult.set(globales.currentAccount)
+    accountListe = configFunction.getAccountListe()
+
     expenseButton.configure(bg='white')
     balanceButton.configure(bg='white')
     shareButton.configure(bg='white')
     settingsButton.configure(bg=color1)
+
+    def updateAccount():
+        index = accountListe.index(accountListeResult.get()) + 1
+        configFunction.InitConfig(index)
+        displayExpensesFrame()
 
     clearFrame(contentMiddleMainFrame)
 
@@ -639,6 +665,10 @@ def displaySettingFrame():
 
     Label(middleSettingFrame, text='Groupe', font=(font1, 15), fg=color2, bg=color0).grid(row=3, column=0, sticky='nw')
     Button(middleSettingFrame, text='Add participant').grid(row=3, column=1, sticky='nw')
+
+    Label(middleSettingFrame, text='Switch account', font=(font1, 15), fg=color2, bg=color0).grid(row=4, column=0, sticky='nw')
+    OptionMenu(middleSettingFrame, accountListeResult, *accountListe).grid(row=5, column=0, sticky='nw')
+    accountListeResult.trace('w', lambda *args: updateAccount())
 
     middleSettingFrame.pack(side=TOP, expand=True, fill=X)
 
