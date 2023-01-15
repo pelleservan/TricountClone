@@ -5,6 +5,8 @@ import configFunction
 import csvFunction
 import Classes
 
+import pdfManager
+
 # initialise les var globales
 globales.initialize() 
 
@@ -274,8 +276,7 @@ def upDateHead():
     buttonHeadMainFrame = Frame(headMainFrame)
     buttonHeadMainFrame.config(bg=color0)
 
-    Button(buttonHeadMainFrame, text='Print', width=10).pack(side=LEFT, expand=True, fill=X)
-    Button(buttonHeadMainFrame, text='Creat account', command=lambda:createAccount(), width=10).pack(side=LEFT, expand=True, fill=X)
+    Button(buttonHeadMainFrame, text='Print', command=lambda:pdfManager.editPDF(globales.currentAccount, globales.username), width=10).pack(side=LEFT, expand=True, fill=X)
     Button(buttonHeadMainFrame, text='Exit', command=lambda:window.destroy(), width=10).pack(side=RIGHT, expand=True, fill=X)
 
     buttonHeadMainFrame.pack(side=RIGHT, expand=True, fill=X)
@@ -300,8 +301,6 @@ expensesFrame = Frame(middleMainFrame, width=1366)
 expensesFrame.config(bg=color0)
 balanceFrame = Frame(middleMainFrame, width=1366)
 balanceFrame.config(bg=color0)
-shareFrame = Frame(middleMainFrame, width=1366)
-shareFrame.config(bg=color0)
 settingFrame = Frame(middleMainFrame, width=1366)
 settingFrame.config(bg=color0)
 
@@ -309,8 +308,6 @@ expenseButton = Button(headMiddleMainFrame, text='Expenses', command=lambda:disp
 expenseButton.pack(side=LEFT, expand=True, fill=X)
 balanceButton = Button(headMiddleMainFrame, text='Balance', command=lambda:displayBalanceFrame())
 balanceButton.pack(side=LEFT, expand=True, fill=X)
-shareButton = Button(headMiddleMainFrame, text='Share', command=lambda:displayShareFrame())
-shareButton.pack(side=LEFT, expand=True, fill=X)
 settingsButton = Button(headMiddleMainFrame, text='Settings', command=lambda:displaySettingFrame())
 settingsButton.pack(side=RIGHT, expand=True, fill=X)
 
@@ -326,7 +323,6 @@ def displayExpensesFrame():
 
     expenseButton.configure(bg=color1)
     balanceButton.configure(bg='white')
-    shareButton.configure(bg='white')
     settingsButton.configure(bg='white')
 
     clearFrame(contentMiddleMainFrame)
@@ -497,7 +493,6 @@ def displayBalanceFrame():
 
     expenseButton.configure(bg='white')
     balanceButton.configure(bg=color1)
-    shareButton.configure(bg='white')
     settingsButton.configure(bg='white')
 
     clearFrame(contentMiddleMainFrame)
@@ -526,9 +521,7 @@ def displayBalanceFrame():
     rightMiddleBalanceFrame = Frame(balanceFrame, width=1366)
     rightMiddleBalanceFrame.config(bg=color0)
 
-    #a faire en fonction du compte
-    Label(rightMiddleBalanceFrame, text='How to balance? ', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
-    Label(rightMiddleBalanceFrame, text='No payment is required to balance the books !', font=(font1, 15), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
+    Label(rightMiddleBalanceFrame, text='How to balance ? ', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
 
     rightMiddleBalanceFrame.pack(side=RIGHT, expand=True, fill=X)
 
@@ -555,57 +548,6 @@ def displayBalanceFrame():
 
     balanceFrame.pack(side=TOP, expand=True, fill=X)
 
-def displayShareFrame():
-    global shareFrame
-    global contentMiddleMainFrame
-
-    expenseButton.configure(bg='white')
-    balanceButton.configure(bg='white')
-    shareButton.configure(bg=color1)
-    settingsButton.configure(bg='white')
-
-    clearFrame(contentMiddleMainFrame)
-
-    if shareFrame :
-        shareFrame.pack_forget()
-        shareFrame = Frame(contentMiddleMainFrame, width=1366)
-        shareFrame.config(bg=color0)
-
-    def upDateHeadShare():
-        global headShareFrame
-
-        Label(headShareFrame, text='Invite friends to participate in the accounts', font=(font1, 15), fg=color2, bg=color0).pack(side=LEFT)
-        Label(headShareFrame, text='You are identified as '+str(globales.username), font=(font1, 15), fg=color2, bg=color0).pack(side=RIGHT)
-
-        headShareFrame.pack(side=TOP, expand=True, fill=X)
-
-    global headShareFrame
-    headShareFrame = Frame(shareFrame, width=1366)
-    headShareFrame.config(bg=color0)
-    #Content set in upDateHeadExpeses()
-    headShareFrame.pack(side=TOP, expand=True, fill=X)
-
-    upDateHeadShare()
-
-    middleShareFrame = Frame(shareFrame, width=1366)
-    middleShareFrame.config(bg=color0)
-    
-    contentMiddleShareFrame = Frame(middleShareFrame, width=1366)
-    contentMiddleShareFrame.config(bg=color0)
-
-    Label(contentMiddleShareFrame, text='Copy the text below into an email and send it to the group :', font=(font1, 15), fg=color2, bg=color0).grid(row=0, column=0, sticky='nw')
-    Label(contentMiddleShareFrame, text='The '+str(globales.currentAccount)+' accounts are accessible on Tricount :', font=(font1, 15), fg=color2, bg=color0).grid(row=1, column=0, sticky='nw')
-    Label(contentMiddleShareFrame, text='To access :', font=(font1, 15), fg=color2, bg=color0).grid(row=2, column=0, sticky='nw')
-    Label(contentMiddleShareFrame, text='• From your mobile device, download the Tricount app', font=(font1, 15), fg=color2, bg=color0).grid(row=3, column=0, sticky='nw')
-    Label(contentMiddleShareFrame, text=' (for iPhone, Android and Windows) and then follow the link :', font=(font1, 15), fg=color2, bg=color0).grid(row=4, column=0, sticky='nw')
-    Label(contentMiddleShareFrame, text='• From a computer, simply click on the link ', font=(font1, 15), fg=color2, bg=color0).grid(row=5, column=0, sticky='nw')
-
-    contentMiddleShareFrame.pack(side=TOP, expand=True, fill=X)
-
-    middleShareFrame.pack(side=TOP, expand=True, fill=X)
-
-    shareFrame.pack(expand=True, fill=X)
-
 def displaySettingFrame():
     global settingFrame
     global contentMiddleMainFrame
@@ -616,7 +558,6 @@ def displaySettingFrame():
 
     expenseButton.configure(bg='white')
     balanceButton.configure(bg='white')
-    shareButton.configure(bg='white')
     settingsButton.configure(bg=color1)
 
     def updateAccount():
@@ -640,7 +581,7 @@ def displaySettingFrame():
         headSettingFrame.pack(side=TOP, expand=True, fill=X)
 
     global headSettingFrame
-    headSettingFrame = Frame(shareFrame, width=1366)
+    headSettingFrame = Frame(settingFrame, width=1366)
     headSettingFrame.config(bg=color0)
     #Content set in upDateHeadExpeses()
     headSettingFrame.pack(side=TOP, expand=True, fill=X)
