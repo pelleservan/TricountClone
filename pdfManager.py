@@ -15,10 +15,8 @@ def editPDF(currentAccount, username):
     label = tk.Label(popup, text="your pdf file is available in : "+str(os.getcwd()))
     label.pack()
 
-    # Créer un nouveau document PDF avec une taille de page letter
     doc = SimpleDocTemplate("./"+str(currentAccount.replace(" ", "_"))+".pdf", pagesize=letter)
 
-    # Créer un style pour le texte
     styles = getSampleStyleSheet()
     style = styles["Normal"]
 
@@ -37,14 +35,11 @@ def editPDF(currentAccount, username):
     styleGreen = getSampleStyleSheet()
     styleGreen['Normal'].backColor = "#b3ff9c"
 
-    # Créer une liste de contenu pour le document
     content = []
 
     content.append(Paragraph("Account : "+str(currentAccount), title['Normal']))
 
     content.append(Paragraph("Created by "+str(username), subTitle['Normal']))
-
-    # Ajouter un titre au document
 
     currentAccountExpensesFile = './'+str(currentAccount.replace(" ", "_"))+'.csv'
     expenses = pd.read_csv(currentAccountExpensesFile)
@@ -64,13 +59,10 @@ def editPDF(currentAccount, username):
 
     expenses = expenses.append(total, ignore_index=True)
 
-    # Convertir les données du DataFrame en une liste de listes pour la création de table
     expensesTable = [expenses.columns.tolist()] + expenses.values.tolist()
 
-    # Créer un tableau avec les données du DataFrame
     expensesTable = Table(expensesTable)
 
-    # Définir les styles de tableau
     expensesTable.setStyle([('BACKGROUND', (0, 0), (-1, 0), '#FFA500'),
                     ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
                     ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
@@ -81,7 +73,6 @@ def editPDF(currentAccount, username):
 
     content.append(expensesTable)
 
-    # Ajouter du texte au document
     content.append(Paragraph("Balence :", subTitle['Normal']))
 
     for participant in expenses.columns[1:-1]:
@@ -92,7 +83,6 @@ def editPDF(currentAccount, username):
             content.append(Paragraph(str(participant)+" : "+str(value), styleRed['Normal']))
         else:content.append(str(participant)+" : "+str(value), style)
 
-        # Construire le document à partir de la liste de contenu
     doc.build(content)
 
     button = tk.Button(popup, text="OK", command=popup.destroy)
